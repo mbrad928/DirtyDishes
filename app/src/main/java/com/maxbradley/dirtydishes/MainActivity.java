@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         //test comment 2
         //test comment Cameron
-        //max branch test
+        //max branch delete
     }
 
     @Override
