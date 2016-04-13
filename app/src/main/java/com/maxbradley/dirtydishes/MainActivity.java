@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
-//this is Christine
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //test comment 2
-        //test comment Cameron
-        //max branch delete
     }
 
     @Override
