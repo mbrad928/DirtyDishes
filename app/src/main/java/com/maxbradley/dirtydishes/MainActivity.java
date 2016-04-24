@@ -3,15 +3,16 @@ package com.maxbradley.dirtydishes;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
-
-import com.maxbradley.dirtydishes.Chore.Priority;
-import com.maxbradley.dirtydishes.Chore.Status;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,8 +25,23 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
-public class MainActivity extends ListActivity {
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ListView;
+import android.widget.TextView;
+import com.maxbradley.dirtydishes.Chore.Priority;
+import com.maxbradley.dirtydishes.Chore.Status;
+
+public class MainActivity extends AppCompatActivity {
 
     /* startActivityForResult() request codes */
     private static final int ADD_TODO_ITEM_REQUEST = 0;
@@ -60,9 +76,13 @@ public class MainActivity extends ListActivity {
 
     List_Adapter mAdapter;
 
+    ListView listView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.list_layout);
+        mAdapter = new List_Adapter(getApplicationContext());
 
 
 
@@ -75,11 +95,16 @@ public class MainActivity extends ListActivity {
 
 
         mAdapter = new List_Adapter(getApplicationContext());
-        getListView().setFooterDividersEnabled(true);
+        listView.setFooterDividersEnabled(true);
+        listView = (ListView) findViewById(R.id.listView);
+        if(listView == null)
+            Log.d(TAG, "null");
 
-        TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer, null);
+        listView.setFooterDividersEnabled(true);
 
-        getListView().addFooterView(footerView);
+        TextView footerView =  (TextView) getLayoutInflater().inflate(R.layout.footer, null);
+
+        listView.addFooterView(footerView);
         footerView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,9 +114,7 @@ public class MainActivity extends ListActivity {
             }
         });
 
-
-        getListView().setAdapter(mAdapter);
-
+        listView.setAdapter(mAdapter);
     }
 
     @Override
@@ -143,6 +166,7 @@ public class MainActivity extends ListActivity {
 
 
     }
+
 
 
     @Override
