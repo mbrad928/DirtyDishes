@@ -21,6 +21,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -36,7 +37,7 @@ import android.widget.TextView;
 import com.maxbradley.dirtydishes.Chore.Priority;
 import com.maxbradley.dirtydishes.Chore.Status;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends AppCompatActivity {
 
     private static final int ADD_TODO_ITEM_REQUEST = 0;
     private static final String FILE_NAME = "TodoManagerActivityData.txt";
@@ -48,16 +49,23 @@ public class MainActivity extends ListActivity {
 
     List_Adapter mAdapter;
 
+    ListView listView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.list_layout);
         mAdapter = new List_Adapter(getApplicationContext());
 
-        getListView().setFooterDividersEnabled(true);
+        listView = (ListView) findViewById(R.id.listView);
+        if(listView == null)
+            Log.d(TAG, "null");
+
+        listView.setFooterDividersEnabled(true);
 
         TextView footerView =  (TextView) getLayoutInflater().inflate(R.layout.footer, null);
 
-        getListView().addFooterView(footerView);
+        listView.addFooterView(footerView);
         footerView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +75,7 @@ public class MainActivity extends ListActivity {
             }
         });
 
-        getListView().setAdapter(mAdapter);
+        listView.setAdapter(mAdapter);
     }
 
     @Override
