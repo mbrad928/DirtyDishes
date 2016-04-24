@@ -27,56 +27,122 @@ import java.util.Date;
 
 public class MainActivity extends ListActivity {
 
+    /* startActivityForResult() request codes */
     private static final int ADD_TODO_ITEM_REQUEST = 0;
+    private static final int SIGN_IN_REQUEST_CODE = 1;
+
     private static final String FILE_NAME = "TodoManagerActivityData.txt";
     private static final String TAG = "Lab-UserInterface";
+
+    /*  For use with sign-in/create account activity */
+    static final String USERNAME = "username";
+    static final String PASSWORD = "password";
+
+    /* Extra field in result intent to determine if user wants to sign in or create account */
+    static final String CREATE_OR_SIGN_IN = "create_or_sign_in";
+    static final String SIGN_IN = "sign_in";
+    static final String CREATE_ACCOUNT = "create_account";
+
+    static final int REQUEST_CREATE_ACCOUNT = 2;
+
 
     // IDs for menu items
     private static final int MENU_DELETE = Menu.FIRST;
     private static final int MENU_DUMP = Menu.FIRST + 1;
+
+
+    /* If false, take user to sign-in/create account screen
+       If true, go to main screen with chore list
+     */
+    private boolean userSignedIn = false;
+
+
 
     List_Adapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+        /* Take user to sign-in activity if not already signed in */
+        if (!userSignedIn){
+            Intent intent = new Intent(MainActivity.this, SignIn.class);
+            startActivityForResult(intent, SIGN_IN_REQUEST_CODE);
+        }
+
+
+
         mAdapter = new List_Adapter(getApplicationContext());
         getListView().setFooterDividersEnabled(true);
 
-        TextView footerView =  (TextView) getLayoutInflater().inflate(R.layout.footer, null);
+        TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer, null);
 
         getListView().addFooterView(footerView);
         footerView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent= new Intent(MainActivity.this, AddNewChore.class);
-                startActivityForResult(intent,ADD_TODO_ITEM_REQUEST);
+                Intent intent = new Intent(MainActivity.this, AddNewChore.class);
+                startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
             }
         });
 
 
-        //test comment 2
-        //test comment Cameron edit
-        //max branch test
-
         getListView().setAdapter(mAdapter);
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        /* Either add a chore, or sign in */
+        if (resultCode == RESULT_OK) {
 
-
-        if (requestCode == ADD_TODO_ITEM_REQUEST) {
-            if (resultCode == RESULT_OK) {
+            if (requestCode == ADD_TODO_ITEM_REQUEST){
                 Chore item = new Chore(data);
                 mAdapter.add(item);
+
+            }else if (requestCode == SIGN_IN_REQUEST_CODE){
+
+                String createOrSignIn = data.getStringExtra(CREATE_OR_SIGN_IN);
+
+
+                /* User signing into EXISTING ACCOUNT */
+                if (createOrSignIn.equals(SIGN_IN)){
+
+                    String username = data.getStringExtra(USERNAME);
+                    String password = data.getStringExtra(PASSWORD);
+
+                    Log.i(TAG,"User wants to sign in to existing account");
+                    Log.i(TAG,"Username: "+username+", Password: "+password);
+
+                    /* TODO - check database for username/password combination */
+
+
+                /* User CREATING NEW ACCOUNT */
+                }else if (createOrSignIn.equals(CREATE_ACCOUNT)){
+
+                    String username = data.getStringExtra(USERNAME);
+                    String password = data.getStringExtra(PASSWORD);
+
+                    Log.i(TAG,"User wants to create account");
+                    Log.i(TAG,"Username: "+username+", Password: "+password);
+
+                    /* TODO - add account information to database */
+
+
+
+                }
+
+
             }
+
         }
 
-    }
 
+    }
 
 
     @Override
@@ -124,7 +190,7 @@ public class MainActivity extends ListActivity {
 
         for (int i = 0; i < mAdapter.getCount(); i++) {
             String data = ((Chore) mAdapter.getItem(i)).toLog();
-            Log.i(TAG,	"Item " + i + ": " + data.replace(Chore.ITEM_SEP, ","));
+            Log.i(TAG, "Item " + i + ": " + data.replace(Chore.ITEM_SEP, ","));
         }
 
     }
