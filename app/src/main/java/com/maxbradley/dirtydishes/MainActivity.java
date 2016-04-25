@@ -94,27 +94,26 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        mAdapter = new List_Adapter(getApplicationContext());
-        listView.setFooterDividersEnabled(true);
-        listView = (ListView) findViewById(R.id.listView);
-        if(listView == null)
-            Log.d(TAG, "null");
+            listView = (ListView) findViewById(R.id.listView);
+            if (listView == null)
+                Log.d(TAG, "null");
 
-        listView.setFooterDividersEnabled(true);
+            listView.setFooterDividersEnabled(true);
 
-        TextView footerView =  (TextView) getLayoutInflater().inflate(R.layout.footer, null);
+            TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer, null);
 
-        listView.addFooterView(footerView);
-        footerView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            listView.addFooterView(footerView);
+            footerView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                Intent intent = new Intent(MainActivity.this, AddNewChore.class);
-                startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
-            }
-        });
+                    Intent intent = new Intent(MainActivity.this, AddNewChore.class);
+                    startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
+                }
+            });
 
-        listView.setAdapter(mAdapter);
+            listView.setAdapter(mAdapter);
+
     }
 
     @Override
