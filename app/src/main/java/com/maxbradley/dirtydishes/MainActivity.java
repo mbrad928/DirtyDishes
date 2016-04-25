@@ -154,6 +154,12 @@ public class MainActivity extends AppCompatActivity {
 
                     /* TODO - add account information to database */
 
+                    /* Go to code entry/generation */
+                    Intent intent = new Intent(MainActivity.this,CodeActivity.class);
+                    intent.putExtra(MainActivity.USERNAME,username);
+                    intent.putExtra(MainActivity.PASSWORD,password);
+                    startActivity(intent);
+
 
 
                 }
