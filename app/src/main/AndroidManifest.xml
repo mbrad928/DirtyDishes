@@ -47,6 +47,9 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+        <activity android:name=".CodeActivity"
+            android:label="DirtyDishes"
+            ></activity>
     </application>
 
 </manifest>
