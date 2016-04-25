@@ -2,24 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true">
 
     <!-- Title -->
 
     <TextView
+        android:paddingTop="30dp"
         android:id="@+id/TitleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Title"
-        android:textAppearance="?android:attr/textAppearanceLarge" >
+        android:text="Please Choose the Chore from the Drop Down list or enter the custom name below"
+        android:textAppearance="?android:attr/textAppearanceMedium" >
     </TextView>
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chores_spinner"
+        android:layout_below="@+id/TitleLabel"
+        android:layout_marginTop="30dp"></Spinner>
 
     <EditText
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/TitleLabel"
+        android:layout_below="@+id/chores_spinner"
         android:layout_marginTop="14dp"
         android:ems="10"
         android:hint="Enter Title"
@@ -28,41 +36,6 @@
         <requestFocus />
     </EditText>
 
-    <!-- Status -->
-
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/title"
-        android:layout_marginTop="25dp"
-        android:text="Status"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <RadioGroup
-        android:id="@+id/statusGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/status"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp" >
-
-        <RadioButton
-            android:id="@+id/statusDone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Done" />
-
-        <RadioButton
-            android:id="@+id/statusNotDone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Not Done" />
-    </RadioGroup>
-
     <!-- Priority -->
 
     <TextView
@@ -70,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/statusGroup"
+        android:layout_below="@id/title"
         android:layout_marginTop="25dp"
         android:text="Prioirity"
         android:textAppearance="?android:attr/textAppearanceLarge" />

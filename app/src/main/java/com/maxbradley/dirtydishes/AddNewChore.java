@@ -16,11 +16,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 //import course.labs.todomanager.ToDoItem.Priority;
@@ -51,10 +54,8 @@ public class AddNewChore extends Activity {
         setContentView(R.layout.add_todo);
 
         mTitleText = (EditText) findViewById(R.id.title);
-        mDefaultStatusButton = (RadioButton) findViewById(R.id.statusNotDone);
         mDefaultPriorityButton = (RadioButton) findViewById(R.id.medPriority);
         mPriorityRadioGroup = (RadioGroup) findViewById(R.id.priorityGroup);
-        mStatusRadioGroup = (RadioGroup) findViewById(R.id.statusGroup);
         dateView = (TextView) findViewById(R.id.date);
         timeView = (TextView) findViewById(R.id.time);
 
@@ -86,6 +87,14 @@ public class AddNewChore extends Activity {
             }
         });
 
+        final Spinner spinner = (Spinner) findViewById(R.id.chores_spinner);
+        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.chores_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+
+
         // OnClickListener for the Cancel Button,
 
         final Button cancelButton = (Button) findViewById(R.id.cancelButton);
@@ -106,7 +115,6 @@ public class AddNewChore extends Activity {
 
                 mTitleText.setText("");
                 mDefaultPriorityButton.setChecked(true);
-                mDefaultStatusButton.setChecked(true);
 
                 setDefaultDateTime();
 
@@ -117,11 +125,25 @@ public class AddNewChore extends Activity {
         submitButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        Log.i("spinner val", adapter.getItem(position).toString());
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
                 Chore.Priority priority = getPriority();
-                Chore.Status status = getStatus();
+                Chore.Status status = Chore.Status.NOTDONE;
 
 
                 String titleString =  getToDoTitle();
+
 
                 String fullDate = dateString + " " + timeString;
 
@@ -196,7 +218,7 @@ public class AddNewChore extends Activity {
         }
     }
 
-    private Chore.Status getStatus() {
+    /*private Chore.Status getStatus() {
 
         switch (mStatusRadioGroup.getCheckedRadioButtonId()) {
             case R.id.statusDone: {
@@ -206,7 +228,7 @@ public class AddNewChore extends Activity {
                 return Chore.Status.NOTDONE;
             }
         }
-    }
+    }*/
 
     private String getToDoTitle() {
         return mTitleText.getText().toString();

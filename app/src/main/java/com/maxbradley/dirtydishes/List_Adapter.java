@@ -92,6 +92,8 @@ public class List_Adapter extends BaseAdapter {
                                          boolean isChecked) {
                 if(isChecked){
                     toDoItem.setStatus(Chore.Status.DONE);
+                    mItems.remove(toDoItem);
+                    notifyDataSetChanged();
                 } else {
                     toDoItem.setStatus(Chore.Status.NOTDONE);
                 }
