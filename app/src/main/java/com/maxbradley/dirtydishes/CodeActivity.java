@@ -1,6 +1,7 @@
 package com.maxbradley.dirtydishes;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,9 @@ public class CodeActivity extends Activity {
     private TextView generatedCode;
     private String code;
 
+    private String userName;
+    private String password;
+
     private final String TAG = "CodeActivity";
 
     @Override
@@ -29,12 +33,19 @@ public class CodeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.code_layout);
 
+        Intent incomingIntent = getIntent();
 
+        userName = incomingIntent.getStringExtra(MainActivity.USERNAME);
+        password = incomingIntent.getStringExtra(MainActivity.PASSWORD);
+        Log.d(TAG,userName);
+        Log.d(TAG, password);
 
         codeEnter = (EditText) findViewById(R.id.codeEnter);
         joinButton = (Button) findViewById(R.id.joinButton);
         generateButton = (Button) findViewById(R.id.generateCodeButton);
         generatedCode = (TextView) findViewById(R.id.generatedCode);
+
+
 
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
