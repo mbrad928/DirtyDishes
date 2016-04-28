@@ -50,8 +50,17 @@ public class CodeActivity extends Activity {
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                code = codeEnter.getText().toString();
+                String enteredCode = codeEnter.getText().toString();
                 Log.d(TAG,"Entered code: " + code);
+
+                /*Temporary*/
+                if (!enteredCode.equals("") && enteredCode.equals(code)) {
+                    //go to Chore list
+
+                    Intent intent = new Intent(CodeActivity.this,MainActivity.class);
+                    intent.putExtra("signedIn",true);
+                    startActivity(intent);
+                }
 
                 //TODO: Check database for code
 

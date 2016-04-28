@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity
     private ArrayAdapter<String> drawerAdapter;
 
 
+
+
     List_Adapter mAdapter;
 
     ListView listView;
@@ -85,6 +88,15 @@ public class MainActivity extends AppCompatActivity
         drawerAdapter =
                 new ArrayAdapter<String>(this,R.layout.drawer_item,optionsArray);
         mDrawerList.setAdapter(drawerAdapter);
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                itemSelected(position);
+
+            }
+        });
+
+        userSignedIn = getIntent().getBooleanExtra("signedIn",false);
 
         /* Take user to sign-in activity if not already signed in */
         if (!userSignedIn) {
@@ -166,8 +178,17 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public void setSignedIn(boolean b){
+        this.userSignedIn = b;
+    }
+
+    public boolean itemSelected(int position) {
+        if(position == 0){
+            Log.d(TAG,"First item selected");
+        } else if (position == 1){
+            Log.d(TAG,"Second item selected");
+        }
+
 
         return true;
     }
@@ -279,5 +300,10 @@ public class MainActivity extends AppCompatActivity
                 writer.close();
             }
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        return false;
     }
 }
