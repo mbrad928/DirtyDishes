@@ -1,18 +1,20 @@
 package com.maxbradley.dirtydishes;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.maxbradley.dirtydishes.Chore.Priority;
+import com.maxbradley.dirtydishes.Chore.Status;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -25,23 +27,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 
-import android.app.ListActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ListView;
-import android.widget.TextView;
-import com.maxbradley.dirtydishes.Chore.Priority;
-import com.maxbradley.dirtydishes.Chore.Status;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     /* startActivityForResult() request codes */
     private static final int ADD_TODO_ITEM_REQUEST = 0;
@@ -72,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private boolean userSignedIn = false;
 
+    private ListView mDrawerList;
+    private ArrayAdapter<String> drawerAdapter;
 
 
     List_Adapter mAdapter;
@@ -81,38 +71,43 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_layout);
+        setContentView(R.layout.activity_main);
         mAdapter = new List_Adapter(getApplicationContext());
 
+        listView = (ListView) findViewById(R.id.listView);
+        mDrawerList = (ListView) findViewById(R.id.nav_list);
 
+        String[] optionsArray = {"Chore list",
+                "Expenses",
+                "Calendar",
+                "Settings"
+        };
+        drawerAdapter =
+                new ArrayAdapter<String>(this,R.layout.drawer_item,optionsArray);
+        mDrawerList.setAdapter(drawerAdapter);
 
         /* Take user to sign-in activity if not already signed in */
-        if (!userSignedIn){
+        if (!userSignedIn) {
             Intent intent = new Intent(MainActivity.this, SignIn.class);
             startActivityForResult(intent, SIGN_IN_REQUEST_CODE);
         }
 
 
+        listView.setFooterDividersEnabled(true);
 
-            listView = (ListView) findViewById(R.id.listView);
-            if (listView == null)
-                Log.d(TAG, "null");
+        TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer, null);
 
-            listView.setFooterDividersEnabled(true);
+        listView.addFooterView(footerView);
+        footerView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-            TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer, null);
+                Intent intent = new Intent(MainActivity.this, AddNewChore.class);
+                startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
+            }
+        });
 
-            listView.addFooterView(footerView);
-            footerView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(MainActivity.this, AddNewChore.class);
-                    startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
-                }
-            });
-
-            listView.setAdapter(mAdapter);
+        listView.setAdapter(mAdapter);
 
     }
 
@@ -122,44 +117,43 @@ public class MainActivity extends AppCompatActivity {
         /* Either add a chore, or sign in */
         if (resultCode == RESULT_OK) {
 
-            if (requestCode == ADD_TODO_ITEM_REQUEST){
+            if (requestCode == ADD_TODO_ITEM_REQUEST) {
                 Chore item = new Chore(data);
                 mAdapter.add(item);
 
-            }else if (requestCode == SIGN_IN_REQUEST_CODE){
+            } else if (requestCode == SIGN_IN_REQUEST_CODE) {
 
                 String createOrSignIn = data.getStringExtra(CREATE_OR_SIGN_IN);
 
 
                 /* User signing into EXISTING ACCOUNT */
-                if (createOrSignIn.equals(SIGN_IN)){
+                if (createOrSignIn.equals(SIGN_IN)) {
 
                     String username = data.getStringExtra(USERNAME);
                     String password = data.getStringExtra(PASSWORD);
 
-                    Log.i(TAG,"User wants to sign in to existing account");
-                    Log.i(TAG,"Username: "+username+", Password: "+password);
+                    Log.i(TAG, "User wants to sign in to existing account");
+                    Log.i(TAG, "Username: " + username + ", Password: " + password);
 
                     /* TODO - check database for username/password combination */
 
 
                 /* User CREATING NEW ACCOUNT */
-                }else if (createOrSignIn.equals(CREATE_ACCOUNT)){
+                } else if (createOrSignIn.equals(CREATE_ACCOUNT)) {
 
                     String username = data.getStringExtra(USERNAME);
                     String password = data.getStringExtra(PASSWORD);
 
-                    Log.i(TAG,"User wants to create account");
-                    Log.i(TAG,"Username: "+username+", Password: "+password);
+                    Log.i(TAG, "User wants to create account");
+                    Log.i(TAG, "Username: " + username + ", Password: " + password);
 
                     /* TODO - add account information to database */
 
                     /* Go to code entry/generation */
-                    Intent intent = new Intent(MainActivity.this,CodeActivity.class);
-                    intent.putExtra(MainActivity.USERNAME,username);
-                    intent.putExtra(MainActivity.PASSWORD,password);
+                    Intent intent = new Intent(MainActivity.this, CodeActivity.class);
+                    intent.putExtra(MainActivity.USERNAME, username);
+                    intent.putExtra(MainActivity.PASSWORD, password);
                     startActivity(intent);
-
 
 
                 }
@@ -172,6 +166,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+
+        return true;
+    }
 
 
     @Override

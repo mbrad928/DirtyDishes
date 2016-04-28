@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:textAppearance="?android:attr/textAppearanceLarge" >
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000000">
     </TextView>
 
     <TextView
@@ -22,7 +23,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="17dp"
-        android:text="Done" >
+        android:text="Done: "
+        android:textColor="#000000">
     </TextView>
 
     <CheckBox
@@ -31,7 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="52dp"
-        android:layout_toRightOf="@+id/StatusLabel" >
+        android:layout_toRightOf="@+id/StatusLabel"
+        android:buttonTint="#000000">
     </CheckBox>
 
     <TextView
@@ -41,7 +44,8 @@
         android:layout_alignBaseline="@+id/statusCheckBox"
         android:layout_alignTop="@+id/StatusLabel"
         android:layout_toLeftOf="@+id/priorityView"
-        android:text="Prioirity" >
+        android:text="Priority: "
+        android:textColor="#000000">
     </TextView>
 
     <TextView
@@ -50,7 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/statusCheckBox"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/StatusLabel" >
+        android:layout_alignTop="@+id/StatusLabel"
+        android:textColor="#000000">
     </TextView>
 
     <TextView
@@ -59,7 +64,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/statusCheckBox"
-        android:text="Date" >
+        android:text="Date: "
+        android:textColor="#000000">
     </TextView>
 
     <TextView
@@ -67,7 +73,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/DateLabel"
-        android:layout_toRightOf="@+id/DateLabel" >
+        android:layout_toRightOf="@+id/DateLabel"
+        android:textColor="#000000">
     </TextView>
 
 </RelativeLayout>
