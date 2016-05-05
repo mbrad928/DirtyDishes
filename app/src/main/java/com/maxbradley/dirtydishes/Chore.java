@@ -40,6 +40,17 @@ public class Chore {
         this.mDate = date;
     }
 
+    Chore(ChoreItem item){
+        this.mTitle = item.getTitle();
+        this.mPriority = Priority.values()[item.getPriority()];
+        this.mStatus = Status.values()[item.getStatus()];
+        try {
+            this.mDate = Chore.FORMAT.parse(item.getDate());
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+    }
+
 
     Chore(Intent intent) {
 

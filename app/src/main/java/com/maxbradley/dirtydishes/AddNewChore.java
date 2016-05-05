@@ -26,6 +26,8 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import com.parse.ParseUser;
 //import course.labs.todomanager.ToDoItem.Priority;
 //import course.labs.todomanager.ToDoItem.Status;
 
@@ -146,6 +148,14 @@ public class AddNewChore extends Activity {
 
 
                 String fullDate = dateString + " " + timeString;
+                ChoreItem newChore = new ChoreItem();
+                newChore.setUser(ParseUser.getCurrentUser());
+                newChore.setApartment(ParseUser.getCurrentUser().getString("apartment"));
+                newChore.setTitle(titleString);
+                newChore.setPriority(priority.ordinal());
+                newChore.setStatus(status.ordinal());
+                newChore.setDate(fullDate);
+                newChore.saveInBackground();
 
                 Intent data = new Intent();
                 Chore.packageIntent(data, titleString, priority, status,
