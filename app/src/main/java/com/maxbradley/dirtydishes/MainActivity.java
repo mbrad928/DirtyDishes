@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.maxbradley.dirtydishes.Chore.Priority;
 import com.maxbradley.dirtydishes.Chore.Status;
+import com.parse.Parse;
+import com.parse.ParseObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -65,8 +67,6 @@ public class MainActivity extends AppCompatActivity
     private ArrayAdapter<String> drawerAdapter;
 
 
-
-
     List_Adapter mAdapter;
 
     ListView listView;
@@ -74,15 +74,29 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Parse.initialize(new Parse.Configuration.Builder(this)
+                        .applicationId("EJ51eO0rkyN7WdVNflZDoUl4SYXAWJZfinx1IQ9I")
+                        .clientKey("V65F9bEcLESrcpmSvxhD6nyiLGjOVAHaXsJROb20")
+                        .server("https://parseapi.back4app.com/")
+                        .build()
+        );
+
+        ParseObject testObject = new ParseObject("NewObject");
+        testObject.put("Key",1000);
+        testObject.put("Name","Max");
+        testObject.saveInBackground();
+        Log.d(TAG, "put object");
+
         setContentView(R.layout.activity_main);
         mAdapter = new List_Adapter(getApplicationContext());
 
         listView = (ListView) findViewById(R.id.listView);
         mDrawerList = (ListView) findViewById(R.id.nav_list);
 
-        String[] optionsArray = {"Chore list",
+        String[] optionsArray = {"Chores",
                 "Expenses",
-                "Calendar",
+                "Add People",
                 "Settings"
         };
         drawerAdapter =
@@ -95,6 +109,8 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+
 
         userSignedIn = getIntent().getBooleanExtra("signedIn",false);
 
@@ -120,6 +136,9 @@ public class MainActivity extends AppCompatActivity
         });
 
         listView.setAdapter(mAdapter);
+
+
+
 
     }
 
@@ -183,10 +202,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     public boolean itemSelected(int position) {
-        if(position == 0){
+        if(position == 0){//Chore list
             Log.d(TAG,"First item selected");
-        } else if (position == 1){
+        } else if (position == 1){//Expenses
             Log.d(TAG,"Second item selected");
+        } else if (position == 2) {//Add people
+
+        } else if (position == 3) {//Settings
+
         }
 
 
