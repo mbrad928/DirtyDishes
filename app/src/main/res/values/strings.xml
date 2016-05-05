@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DirtyDishes</string>
+    <string name="app_name">RoomMe</string>
     <string name="action_settings">Settings</string>
     <string-array name="chores_array">
         <item>Do the Dishes</item>

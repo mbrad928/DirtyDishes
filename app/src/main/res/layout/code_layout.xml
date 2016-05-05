@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Don&apos;t have a code?"
+        android:text="Don't have a room?"
         android:id="@+id/generateCodeView"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
@@ -45,21 +45,12 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generate Code"
+        android:text="Create Room"
         android:id="@+id/generateCodeButton"
         android:singleLine="false"
         android:layout_below="@+id/generateCodeView"
         android:layout_margin="8dp"
         android:layout_centerInParent="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Code: "
-        android:id="@+id/generatedCode"
-        android:layout_below="@+id/generateCodeButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp" />
 
 </RelativeLayout>

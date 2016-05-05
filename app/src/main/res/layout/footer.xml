@@ -6,3 +6,6 @@
     android:gravity="center_horizontal"
     android:text="Add new Chore"
     android:textSize="24sp" />
+
+
+
