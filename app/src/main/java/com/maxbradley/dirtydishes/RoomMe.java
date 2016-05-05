@@ -15,6 +15,7 @@ public class RoomMe extends android.app.Application {
         //place any custom ParseObject classes here
         ParseObject.registerSubclass(Apartment.class);
         ParseObject.registerSubclass(ChoreItem.class);
+        ParseObject.registerSubclass(ExpenseItem.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                         .applicationId("EJ51eO0rkyN7WdVNflZDoUl4SYXAWJZfinx1IQ9I")
