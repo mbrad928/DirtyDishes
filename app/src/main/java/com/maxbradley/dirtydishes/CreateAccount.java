@@ -1,12 +1,17 @@
 package com.maxbradley.dirtydishes;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 /**
  * Created by Cameron on 4/24/2016.
@@ -35,21 +40,44 @@ public class CreateAccount extends Activity {
             @Override
             public void onClick(View v) {
 
-                String username = userNameText.getText().toString();
-                String password = newPasswordText.getText().toString();
+                final String username = userNameText.getText().toString();
+                final String password = newPasswordText.getText().toString();
                 String confirmPass = confirmPasswordText.getText().toString();
 
                 if ( password.equals(confirmPass) ){
 
                     /* TODO - check if username is already used in database */
+                    //set up a progress dialog
+                    final ProgressDialog dialog = new ProgressDialog(CreateAccount.this);
+                    dialog.setMessage("Sign up in progress...");
+                    dialog.show();
 
-                    /* Create intent, pack data into intent and return */
-                    Intent data = new Intent();
-                    data.putExtra(MainActivity.USERNAME,username);
-                    data.putExtra(MainActivity.PASSWORD,password);
-                    data.putExtra(MainActivity.CREATE_OR_SIGN_IN,MainActivity.CREATE_ACCOUNT);
-                    setResult(RESULT_OK, data);
-                    finish();
+                    //set up a new parseuser
+                    ParseUser newUser = new ParseUser();
+                    newUser.setUsername(username);
+                    newUser.setPassword(password);
+
+                    //Call parse signup method
+                    newUser.signUpInBackground(new SignUpCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            dialog.dismiss();
+                            if (e != null) {
+                                //Show error message
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            } else {
+                                /* Create intent, pack data into intent and return */
+                                Intent data = new Intent();
+                                data.putExtra(MainActivity.USERNAME, username);
+                                data.putExtra(MainActivity.PASSWORD, password);
+                                data.putExtra(MainActivity.CREATE_OR_SIGN_IN, MainActivity.CREATE_ACCOUNT);
+                                setResult(RESULT_OK, data);
+                                finish();
+                            }
+                        }
+                    });
+
+
 
                 }else{
                     String message = "Passwords entered do not match.";

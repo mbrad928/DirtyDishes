@@ -81,14 +81,13 @@ public class MainActivity extends AppCompatActivity
                         .server("https://parseapi.back4app.com/")
                         .build()
         );
-
+/* How to add a ParseObject
         ParseObject testObject = new ParseObject("NewObject");
         testObject.put("Key",1000);
         testObject.put("Name","Max");
-        testObject.put("Dicks","Balls");
         testObject.saveInBackground();
         Log.d(TAG, "put object");
-
+*/
         setContentView(R.layout.activity_main);
         mAdapter = new List_Adapter(getApplicationContext());
 
