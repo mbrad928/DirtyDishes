@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity
         ParseObject testObject = new ParseObject("NewObject");
         testObject.put("Key",1000);
         testObject.put("Name","Max");
+        testObject.put("Dicks","Balls");
         testObject.saveInBackground();
         Log.d(TAG, "put object");
 
