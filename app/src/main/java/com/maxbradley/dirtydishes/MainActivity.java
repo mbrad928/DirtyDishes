@@ -2,7 +2,9 @@ package com.maxbradley.dirtydishes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +18,11 @@ import android.widget.TextView;
 
 import com.maxbradley.dirtydishes.Chore.Priority;
 import com.maxbradley.dirtydishes.Chore.Status;
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,6 +35,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -53,7 +61,7 @@ public class MainActivity extends AppCompatActivity
 
     // IDs for menu items
     private static final int MENU_DELETE = Menu.FIRST;
-    private static final int MENU_DUMP = Menu.FIRST + 1;
+    private static final int MENU_LOGOUT = Menu.FIRST + 1;
 
 
     /* If false, take user to sign-in/create account screen
@@ -65,8 +73,6 @@ public class MainActivity extends AppCompatActivity
     private ArrayAdapter<String> drawerAdapter;
 
 
-
-
     List_Adapter mAdapter;
 
     ListView listView;
@@ -74,15 +80,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //place any custom ParseObject classes here
+/* How to add a ParseObject
+        ParseObject testObject = new ParseObject("NewObject");
+        testObject.put("Key",1000);
+        testObject.put("Name","Max");
+        testObject.saveInBackground();
+        Log.d(TAG, "put object");
+*/
         setContentView(R.layout.activity_main);
         mAdapter = new List_Adapter(getApplicationContext());
 
         listView = (ListView) findViewById(R.id.listView);
         mDrawerList = (ListView) findViewById(R.id.nav_list);
 
-        String[] optionsArray = {"Chore list",
+        String[] optionsArray = {"Chores",
                 "Expenses",
-                "Calendar",
+                "Add People",
                 "Settings"
         };
         drawerAdapter =
@@ -96,30 +111,45 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        userSignedIn = getIntent().getBooleanExtra("signedIn",false);
+
+
+      //  userSignedIn = getIntent().getBooleanExtra("signedIn",false);
 
         /* Take user to sign-in activity if not already signed in */
-        if (!userSignedIn) {
+  /*      if (!userSignedIn) {
             Intent intent = new Intent(MainActivity.this, SignIn.class);
             startActivityForResult(intent, SIGN_IN_REQUEST_CODE);
         }
 
-
+*/
         listView.setFooterDividersEnabled(true);
 
-        TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer, null);
-
-        listView.addFooterView(footerView);
-        footerView.setOnClickListener(new OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddNewChore.class);
                 startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
             }
         });
 
+       // TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer, null);
+
+      //  listView.addFooterView(footerView);
+     //   footerView.setOnClickListener(new OnClickListener() {
+      //      @Override
+      //      public void onClick(View v) {
+
+           //     Intent intent = new Intent(MainActivity.this, AddNewChore.class);
+        //        startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
+         //   }
+     //   });
+
+
         listView.setAdapter(mAdapter);
+
+
+
 
     }
 
@@ -147,7 +177,6 @@ public class MainActivity extends AppCompatActivity
                     Log.i(TAG, "User wants to sign in to existing account");
                     Log.i(TAG, "Username: " + username + ", Password: " + password);
 
-                    /* TODO - check database for username/password combination */
 
 
                 /* User CREATING NEW ACCOUNT */
@@ -159,7 +188,6 @@ public class MainActivity extends AppCompatActivity
                     Log.i(TAG, "User wants to create account");
                     Log.i(TAG, "Username: " + username + ", Password: " + password);
 
-                    /* TODO - add account information to database */
 
                     /* Go to code entry/generation */
                     Intent intent = new Intent(MainActivity.this, CodeActivity.class);
@@ -183,10 +211,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     public boolean itemSelected(int position) {
-        if(position == 0){
+        if(position == 0){//Chore list
             Log.d(TAG,"First item selected");
-        } else if (position == 1){
+        } else if (position == 1){//Expenses
             Log.d(TAG,"Second item selected");
+        } else if (position == 2) {//Add people
+
+        } else if (position == 3) {//Settings
+
         }
 
 
@@ -217,7 +249,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreateOptionsMenu(menu);
 
         menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete all");
-        menu.add(Menu.NONE, MENU_DUMP, Menu.NONE, "Dump to log");
+        menu.add(Menu.NONE, MENU_LOGOUT, Menu.NONE, "Logout");
         return true;
     }
 
@@ -227,8 +259,10 @@ public class MainActivity extends AppCompatActivity
             case MENU_DELETE:
                 mAdapter.clear();
                 return true;
-            case MENU_DUMP:
-                dump();
+            case MENU_LOGOUT:
+                ParseUser.logOut();
+                Intent intent = new Intent(MainActivity.this,SignIn.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -246,6 +280,21 @@ public class MainActivity extends AppCompatActivity
 
     // Load stored ToDoItems
     private void loadItems() {
+        //load from Parse
+        ParseQuery<ChoreItem> query = ChoreItem.getQuery();
+        query.whereEqualTo("apartment",ParseUser.getCurrentUser().getString("apartment"));
+        query.findInBackground(new FindCallback<ChoreItem>() {
+            @Override
+            public void done(List<ChoreItem> objects, com.parse.ParseException e) {
+                if(e == null) {
+                    for (ChoreItem chore : objects){
+                        Chore newC = new Chore(chore);
+                        mAdapter.add(newC);
+                    }
+                }
+            }
+        });
+        /*
         BufferedReader reader = null;
         try {
             FileInputStream fis = openFileInput(FILE_NAME);
@@ -278,10 +327,14 @@ public class MainActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
     }
 
     private void saveItems() {
+        //no need to save b/c of Parse
+
+    }
+        /*
         PrintWriter writer = null;
         try {
             FileOutputStream fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
@@ -300,7 +353,7 @@ public class MainActivity extends AppCompatActivity
                 writer.close();
             }
         }
-    }
+    }*/
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

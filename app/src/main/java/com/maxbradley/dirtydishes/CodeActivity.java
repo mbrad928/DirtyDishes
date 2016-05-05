@@ -3,6 +3,7 @@ package com.maxbradley.dirtydishes;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -10,23 +11,32 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
  * Created by Max on 4/25/2016.
  */
-public class CodeActivity extends Activity {
+public class CodeActivity extends AppCompatActivity {
 
     private EditText codeEnter;
     private Button joinButton;
     private Button generateButton;
-    private TextView generatedCode;
     private String code;
 
-    private String userName;
+    private String username;
     private String password;
 
     private final String TAG = "CodeActivity";
+    boolean found = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +45,14 @@ public class CodeActivity extends Activity {
 
         Intent incomingIntent = getIntent();
 
-        userName = incomingIntent.getStringExtra(MainActivity.USERNAME);
+        username = incomingIntent.getStringExtra(MainActivity.USERNAME);
         password = incomingIntent.getStringExtra(MainActivity.PASSWORD);
-        Log.d(TAG,userName);
+        Log.d(TAG,username);
         Log.d(TAG, password);
 
         codeEnter = (EditText) findViewById(R.id.codeEnter);
         joinButton = (Button) findViewById(R.id.joinButton);
         generateButton = (Button) findViewById(R.id.generateCodeButton);
-        generatedCode = (TextView) findViewById(R.id.generatedCode);
 
 
 
@@ -54,8 +63,9 @@ public class CodeActivity extends Activity {
                 Log.d(TAG,"Entered code: " + code);
 
                 /*Temporary*/
-                if (!enteredCode.equals("") && enteredCode.equals(code)) {
+                if (!enteredCode.equals("")) {
                     //go to Chore list
+                    //query for code
 
                     Intent intent = new Intent(CodeActivity.this,MainActivity.class);
                     intent.putExtra("signedIn",true);
@@ -71,61 +81,92 @@ public class CodeActivity extends Activity {
             }
         });
 
+
+
         generateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //make a new apartment in Parse and use the objectId as the code
+                final Apartment apartment = new Apartment();
+                apartment.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null) {
+                            ParseUser.getCurrentUser().put("apartment", apartment.getApartmentCode());
+                            ParseUser.getCurrentUser().saveInBackground();
+                        }
+                    }
+                });
+                //Apartment objectId is also the code
+
+
+
+
+                Intent data = new Intent(CodeActivity.this,MainActivity.class);
+                data.putExtra(MainActivity.USERNAME, username);
+                data.putExtra(MainActivity.PASSWORD, password);
+                startActivity(data);
+
+                /*
+
+                Using the Apartment objectId as the code. Guarantees no duplicates and more complex
+                than what was previously being used
+
+                 */
+
+
                 /* generate a new code. 3 letters (A-F), 3 numbers (0-9).
                 Check if it is already in use  */
-                code = "";
-                Object[][] codeArray = new Object[2][3];
-                //generate 3 numbers 0-9
-                Random r = new Random();
-                codeArray[0][0] = r.nextInt(10);
-                codeArray[0][1] = r.nextInt(10);
-                codeArray[0][2] = r.nextInt(10);
+/*
 
-                //generate 3 letters
-                String[] letterOptions = {"A","B","C","D","E","F"};
-                codeArray[1][0] = letterOptions[r.nextInt(6)];
-                codeArray[1][1] = letterOptions[r.nextInt(6)];
-                codeArray[1][2] = letterOptions[r.nextInt(6)];
+                    Object[][] codeArray = new Object[2][3];
+                    //generate 3 numbers 0-9
+                    Random r = new Random();
+                    codeArray[0][0] = r.nextInt(10);
+                    codeArray[0][1] = r.nextInt(10);
+                    codeArray[0][2] = r.nextInt(10);
 
-                //combine them randomly
-                //2d array to hold both numbers and letters. 2 rows, 3 columns
-                // First row is numbers, second is letters
-                //have a loop that randomly swaps elements
+                    //generate 3 letters
+                    String[] letterOptions = {"A", "B", "C", "D", "E", "F"};
+                    codeArray[1][0] = letterOptions[r.nextInt(6)];
+                    codeArray[1][1] = letterOptions[r.nextInt(6)];
+                    codeArray[1][2] = letterOptions[r.nextInt(6)];
 
-                for (int i = 0; i < 10; i++) {
-                    int ele1a = r.nextInt(2);
-                    int ele1b = r.nextInt(3);
+                    //combine them randomly
+                    //2d array to hold both numbers and letters. 2 rows, 3 columns
+                    // First row is numbers, second is letters
+                    //have a loop that randomly swaps elements
 
-                    int ele2a = r.nextInt(2);
-                    int ele2b = r.nextInt(3);
+                    for (int i = 0; i < 10; i++) {
+                        int ele1a = r.nextInt(2);
+                        int ele1b = r.nextInt(3);
 
-                    Object temp = codeArray[ele1a][ele1b];
-                    codeArray[ele1a][ele1b] = codeArray[ele2a][ele2b];
-                    codeArray[ele2a][ele2b] = temp;
-                }
+                        int ele2a = r.nextInt(2);
+                        int ele2b = r.nextInt(3);
 
-                //put code into a string
-                for (int i = 0; i < 2; i++) {
-                    for(int j = 0; j < 3; j++){
-                        code += codeArray[i][j];
+                        Object temp = codeArray[ele1a][ele1b];
+                        codeArray[ele1a][ele1b] = codeArray[ele2a][ele2b];
+                        codeArray[ele2a][ele2b] = temp;
                     }
-                }
 
-                Log.d(TAG,"Generated code: " + code);
-                generatedCode.setText("Code: " + code);
+                    //put code into a string
+                    for (int i = 0; i < 2; i++) {
+                        for (int j = 0; j < 3; j++) {
+                            code += codeArray[i][j];
+                        }
+                    }
+                    */
 
 
 
-                //TODO: Check if code is already used in database
+
+
+            //    data.putExtra(MainActivity.CREATE_OR_SIGN_IN, MainActivity.SIGN_IN);
+
 
             }
         });
     }
 
-    public String getCode() {
-        return this.code;
-    }
 }
