@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -217,7 +218,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 
         // If user left a previous apartment, their apartment field will be the empty string
-        if (ParseUser.getCurrentUser().get("apartment").equals("")){
+        if (ParseUser.getCurrentUser().get("apartment") != null && ParseUser.getCurrentUser().get("apartment").equals("")){
             Log.i(TAG,"User has no apartment");
             Intent intent = new Intent(MainActivity.this, CodeActivity.class);
             intent.putExtra(USERNAME,ParseUser.getCurrentUser().getUsername());

@@ -7,10 +7,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import java.util.List;
 
 /**
  * Created by Max on 4/25/2016.
@@ -52,24 +57,44 @@ public class CodeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String enteredCode = codeEnter.getText().toString();
-                Log.d(TAG,"Entered code: " + code);
+                Log.d(TAG,"Entered code: " + enteredCode);
 
                 /*Temporary*/
                 if (!enteredCode.equals("")) {
-                    //go to Chore list
                     //query for code
+                    ParseQuery<Apartment> query = Apartment.getQuery();
+                    query.whereEqualTo("objectId",enteredCode);
+                    query.findInBackground(new FindCallback<Apartment>() {
+                        @Override
+                        public void done(List<Apartment> objects, ParseException e) {
+                            if (e == null) {
+                                if (objects == null || objects.size() == 0) {
+                                    //no code
+                                    Toast.makeText(getApplicationContext(), "Room is not valid", Toast.LENGTH_SHORT).show();
+                                } else {
+
+                                    Apartment apt = objects.get(0);
+                                    ParseUser.getCurrentUser().put("apartment", apt.getApartmentCode());
+                                    ParseUser.getCurrentUser().saveInBackground();
+
+                                    //go to chore list
+                                    Intent data = new Intent(CodeActivity.this, MainActivity.class);
+                                    data.putExtra(MainActivity.USERNAME, username);
+                                    if (null != password) {
+                                        data.putExtra(MainActivity.PASSWORD, password);
+                                    }
+                                    startActivity(data);
+
+                                }
+                            }
+                        }
+                    });
 
                     Intent intent = new Intent(CodeActivity.this,MainActivity.class);
                     intent.putExtra("signedIn",true);
                     startActivity(intent);
                 }
-
-                //TODO: Check database for code
-
-                //if code not in database, show Toast
-                //Toast.makeText(getApplicationContext(),"Room not found",Toast.LENGTH_LONG).show();
-
-                //else go to the room
+                
             }
         });
 
