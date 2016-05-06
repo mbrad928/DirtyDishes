@@ -1,6 +1,5 @@
 package com.maxbradley.dirtydishes;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,19 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Max on 4/25/2016.
@@ -48,7 +38,9 @@ public class CodeActivity extends AppCompatActivity {
         username = incomingIntent.getStringExtra(MainActivity.USERNAME);
         password = incomingIntent.getStringExtra(MainActivity.PASSWORD);
         Log.d(TAG,username);
-        Log.d(TAG, password);
+        if (password != null) {
+            Log.d(TAG, password);
+        }
 
         codeEnter = (EditText) findViewById(R.id.codeEnter);
         joinButton = (Button) findViewById(R.id.joinButton);
@@ -92,7 +84,7 @@ public class CodeActivity extends AppCompatActivity {
                 apartment.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        if(e == null) {
+                        if (e == null) {
                             ParseUser.getCurrentUser().put("apartment", apartment.getApartmentCode());
                             ParseUser.getCurrentUser().saveInBackground();
                         }
@@ -101,11 +93,11 @@ public class CodeActivity extends AppCompatActivity {
                 //Apartment objectId is also the code
 
 
-
-
-                Intent data = new Intent(CodeActivity.this,MainActivity.class);
+                Intent data = new Intent(CodeActivity.this, MainActivity.class);
                 data.putExtra(MainActivity.USERNAME, username);
-                data.putExtra(MainActivity.PASSWORD, password);
+                if (null != password) {
+                    data.putExtra(MainActivity.PASSWORD, password);
+                }
                 startActivity(data);
 
                 /*
@@ -159,10 +151,7 @@ public class CodeActivity extends AppCompatActivity {
                     */
 
 
-
-
-
-            //    data.putExtra(MainActivity.CREATE_OR_SIGN_IN, MainActivity.SIGN_IN);
+                //    data.putExtra(MainActivity.CREATE_OR_SIGN_IN, MainActivity.SIGN_IN);
 
 
             }
