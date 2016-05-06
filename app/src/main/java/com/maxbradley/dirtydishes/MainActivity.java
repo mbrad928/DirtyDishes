@@ -4,37 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.maxbradley.dirtydishes.Chore.Priority;
-import com.maxbradley.dirtydishes.Chore.Status;
 import com.parse.FindCallback;
-import com.parse.Parse;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -212,12 +194,16 @@ public class MainActivity extends AppCompatActivity
 
     public boolean itemSelected(int position) {
         if(position == 0){//Chore list
-            Log.d(TAG,"First item selected");
+            Log.d(TAG,"'Chore list' selected");
         } else if (position == 1){//Expenses
-            Log.d(TAG,"Second item selected");
+            Log.d(TAG,"'Expenses' selected");
         } else if (position == 2) {//Add people
-
+            Log.d(TAG,"'Add people' selected");
         } else if (position == 3) {//Settings
+            Log.d(TAG,"'Settings' selected");
+
+            Intent intent = new Intent(MainActivity.this, Settings.class);
+            startActivity(intent);
 
         }
 
@@ -229,6 +215,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+
+        // If user left a previous apartment, their apartment field will be the empty string
+        if (ParseUser.getCurrentUser().get("apartment").equals("")){
+            Log.i(TAG,"User has no apartment");
+            Intent intent = new Intent(MainActivity.this, CodeActivity.class);
+            intent.putExtra(USERNAME,ParseUser.getCurrentUser().getUsername());
+            startActivity(intent);
+        }
 
         if (mAdapter.getCount() == 0)
             loadItems();

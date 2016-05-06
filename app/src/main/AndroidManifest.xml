@@ -49,6 +49,13 @@
             android:label="@string/app_name"
             ></activity>
 
+        <activity android:name=".Settings"
+            android:label="@string/app_name"
+            ></activity>
+
+        <activity android:name=".ChangePassword"
+            android:label="RoomMe"></activity>
+
         <activity android:name=".StartingActivity"
             android:label="@string/app_name">
 
