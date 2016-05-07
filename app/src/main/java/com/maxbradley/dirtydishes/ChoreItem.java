@@ -35,6 +35,12 @@ public class ChoreItem extends ParseObject {
         put("date",date);
     }
 
+    public void setPerson(String person) {
+        put("person",person);
+    }
+
+    public String getPerson(){return getString("person");}
+
     public String getTitle() {
         return getString("title");
     }

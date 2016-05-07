@@ -56,45 +56,44 @@ public class CodeActivity extends AppCompatActivity {
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String enteredCode = codeEnter.getText().toString();
-                Log.d(TAG,"Entered code: " + enteredCode);
+                final String enteredCode = codeEnter.getText().toString();
+                Log.d(TAG, "Entered code: " + code);
 
-                /*Temporary*/
+                /*Temporary
                 if (!enteredCode.equals("")) {
+                    //go to Chore list
                     //query for code
-                    ParseQuery<Apartment> query = Apartment.getQuery();
-                    query.whereEqualTo("objectId",enteredCode);
-                    query.findInBackground(new FindCallback<Apartment>() {
-                        @Override
-                        public void done(List<Apartment> objects, ParseException e) {
-                            if (e == null) {
-                                if (objects == null || objects.size() == 0) {
-                                    //no code
-                                    Toast.makeText(getApplicationContext(), "Room is not valid", Toast.LENGTH_SHORT).show();
-                                } else {
-
-                                    Apartment apt = objects.get(0);
-                                    ParseUser.getCurrentUser().put("apartment", apt.getApartmentCode());
-                                    ParseUser.getCurrentUser().saveInBackground();
-
-                                    //go to chore list
-                                    Intent data = new Intent(CodeActivity.this, MainActivity.class);
-                                    data.putExtra(MainActivity.USERNAME, username);
-                                    if (null != password) {
-                                        data.putExtra(MainActivity.PASSWORD, password);
-                                    }
-                                    startActivity(data);
-
-                                }
-                            }
-                        }
-                    });
 
                     Intent intent = new Intent(CodeActivity.this,MainActivity.class);
                     intent.putExtra("signedIn",true);
                     startActivity(intent);
-                }
-                
+                }*/
+
+                ParseQuery<Apartment> query = Apartment.getQuery();
+                query.findInBackground(new FindCallback<Apartment>() {
+                    @Override
+                    public void done(List<Apartment> objects, com.parse.ParseException e) {
+                        if(e == null) {
+                            boolean found = false;
+                            for (Apartment a : objects){
+                                if (a.getApartmentCode().equals(enteredCode)){
+                                    Log.i("Found apartment match",a.getApartmentCode());
+                                    //change apartment string to a.getApartmentCode()
+                                    ParseUser.getCurrentUser().put("apartment", a.getApartmentCode());
+                                    ParseUser.getCurrentUser().saveInBackground();
+                                    found = true;
+                                    Intent data = new Intent(CodeActivity.this, MainActivity.class);
+                                    data.putExtra(MainActivity.USERNAME, username);
+                                    startActivity(data);
+                                }
+                            }
+                            if(!found){
+                                Toast.makeText(getApplicationContext(),"Room not found", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                });
+
             }
         });
 
@@ -184,3 +183,4 @@ public class CodeActivity extends AppCompatActivity {
     }
 
 }
+

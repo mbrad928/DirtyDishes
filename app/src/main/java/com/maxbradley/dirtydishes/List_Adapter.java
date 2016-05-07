@@ -12,11 +12,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import org.w3c.dom.Text;
 
@@ -71,9 +79,9 @@ public class List_Adapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        final Chore toDoItem = (Chore)getItem(position);
+        final Chore toDoItem = getItem(position);
 
-        RelativeLayout itemLayout = (RelativeLayout) LayoutInflater.from(mContext).inflate(R.layout.todoitem, parent, false);
+        LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.todoitem, parent, false);
         if(convertView == null){
 
         }
@@ -82,27 +90,57 @@ public class List_Adapter extends BaseAdapter {
         String title = toDoItem.getTitle();
         titleView.setText(title);
 
+        TextView person = (TextView) itemLayout.findViewById(R.id.person_task_name);
+        //Log.i("Person is", toDoItem.getPerson());
+        person.setText(toDoItem.getPerson());
 
-        final CheckBox statusView = (CheckBox)itemLayout.findViewById(R.id.statusCheckBox);
-        statusView.setChecked(toDoItem.getStatus().equals(Chore.Status.DONE));
 
-        statusView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        final Button statusView = (Button)itemLayout.findViewById(R.id.complete);
+        //statusView.setChecked(toDoItem.getStatus().equals(Chore.Status.DONE));
+
+        statusView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
-                if(isChecked){
-                    toDoItem.setStatus(Chore.Status.DONE);
+            public void onClick(View v) {
+
+                if (toDoItem.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
                     mItems.remove(toDoItem);
                     notifyDataSetChanged();
-                } else {
-                    toDoItem.setStatus(Chore.Status.NOTDONE);
-                }
 
+                    //remove from db
+                    ParseQuery<ChoreItem> query = ChoreItem.getQuery();
+                    //query.whereEqualTo("person", ParseUser.getCurrentUser());
+                    query.whereEqualTo("title", toDoItem.getTitle());
+
+                    query.findInBackground(new FindCallback<ChoreItem>() {
+                        @Override
+                        public void done(List<ChoreItem> objects, ParseException e) {
+                            if (e == null) {
+                                for (ChoreItem chore : objects) {
+                                    try {
+                                        chore.delete();
+                                        chore.saveInBackground();
+
+
+                                    } catch (ParseException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+
+                } else {
+                    Toast.makeText(mContext, "This is not your task", Toast.LENGTH_LONG).show();
+                }
             }
+
         });
+
 
         TextView priorityView = (TextView) itemLayout.findViewById (R.id.priorityView);
         priorityView.setText(toDoItem.getPriority().toString());
+        //change prioirity text color
 
 
         String string = Chore.FORMAT.format(toDoItem.getDate());
@@ -113,4 +151,6 @@ public class List_Adapter extends BaseAdapter {
 
     }
 }
+
+
 

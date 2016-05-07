@@ -6,15 +6,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -78,7 +80,8 @@ public class MainActivity extends AppCompatActivity
         listView = (ListView) findViewById(R.id.listView);
         mDrawerList = (ListView) findViewById(R.id.nav_list);
 
-        String[] optionsArray = {"Chores",
+        String[] optionsArray = {"View Your Chores",
+                "View All Chores",
                 "Expenses",
                 "Add People",
                 "Settings"
@@ -86,6 +89,13 @@ public class MainActivity extends AppCompatActivity
         drawerAdapter =
                 new ArrayAdapter<String>(this,R.layout.drawer_item,optionsArray);
         mDrawerList.setAdapter(drawerAdapter);
+
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header_news = (ViewGroup)inflater.inflate(R.layout.drawer_header, mDrawerList, false);
+        TextView name = (TextView) header_news.findViewById(R.id.username);
+        name.setText(ParseUser.getCurrentUser().getUsername());
+        mDrawerList.addHeaderView(header_news, null, false);
+
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -96,7 +106,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-      //  userSignedIn = getIntent().getBooleanExtra("signedIn",false);
+        //  userSignedIn = getIntent().getBooleanExtra("signedIn",false);
 
         /* Take user to sign-in activity if not already signed in */
   /*      if (!userSignedIn) {
@@ -105,7 +115,7 @@ public class MainActivity extends AppCompatActivity
         }
 
 */
-        listView.setFooterDividersEnabled(true);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -116,22 +126,33 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-       // TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer, null);
+        // TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer, null);
 
-      //  listView.addFooterView(footerView);
-     //   footerView.setOnClickListener(new OnClickListener() {
-      //      @Override
-      //      public void onClick(View v) {
+        //  listView.addFooterView(footerView);
+        //   footerView.setOnClickListener(new OnClickListener() {
+        //      @Override
+        //      public void onClick(View v) {
 
-           //     Intent intent = new Intent(MainActivity.this, AddNewChore.class);
+        //     Intent intent = new Intent(MainActivity.this, AddNewChore.class);
         //        startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
-         //   }
-     //   });
+        //   }
+        //   });
 
 
         listView.setAdapter(mAdapter);
+        //LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.task_header, mDrawerList, false);
+        TextView title = (TextView) header.findViewById(R.id.title);
+        Intent i = getIntent();
+        int all = i.getIntExtra("all",0);
+        if(all == 1){
+            title.setText("All Chores");
+        }else{
+            title.setText("Your Chores");
+        }
 
-
+        listView.addHeaderView(header, null, false);
+        listView.setHeaderDividersEnabled(true);
 
 
     }
@@ -144,7 +165,9 @@ public class MainActivity extends AppCompatActivity
 
             if (requestCode == ADD_TODO_ITEM_REQUEST) {
                 Chore item = new Chore(data);
-                mAdapter.add(item);
+                if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
+                    mAdapter.add(item);
+                }
 
             } else if (requestCode == SIGN_IN_REQUEST_CODE) {
 
@@ -194,21 +217,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     public boolean itemSelected(int position) {
-        if(position == 0){//Chore list
-            Log.d(TAG,"'Chore list' selected");
-        } else if (position == 1){//Expenses
-            Log.d(TAG,"'Expenses' selected");
-        } else if (position == 2) {//Add people
-            Log.d(TAG,"'Add people' selected");
-        } else if (position == 3) {//Settings
-            Log.d(TAG,"'Settings' selected");
+        if(position == 1){//View Your Chores
+            Log.d(TAG, "'View Your Chores' selected");
+            Intent i = new Intent(MainActivity.this,MainActivity.class);
+            startActivity(i);
+        } else if (position == 2){//View all Chores
+            Log.d(TAG, "'View all Chores' selected");
+            Intent i = new Intent(MainActivity.this,MainActivity.class);
+            i.putExtra("all",1);
+            startActivity(i);
+        } else if (position == 3) {// Expenses
+            Log.d(TAG, "'Expenses' selected");
+            Intent i = new Intent(MainActivity.this,Expenses.class);
+            startActivity(i);
+        } else if (position == 4) {//Add people
+            Log.d(TAG, "'Add people' selected");
+            Intent i = new Intent(MainActivity.this,AddApartment.class);
+            startActivity(i);
 
+
+        }else if(position == 5) { //Settings
+            Log.d(TAG,"'Settings' selected");
             Intent intent = new Intent(MainActivity.this, Settings.class);
             startActivity(intent);
-
         }
-
-
         return true;
     }
 
@@ -217,16 +249,25 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
-        // If user left a previous apartment, their apartment field will be the empty string
-        if (ParseUser.getCurrentUser().get("apartment") != null && ParseUser.getCurrentUser().get("apartment").equals("")){
-            Log.i(TAG,"User has no apartment");
-            Intent intent = new Intent(MainActivity.this, CodeActivity.class);
-            intent.putExtra(USERNAME,ParseUser.getCurrentUser().getUsername());
+        if(ParseUser.getCurrentUser().get("apartment")==null){
+            Log.i(TAG, "User's apartment is null");
+            Intent intent = new Intent(MainActivity.this, SignIn.class);
             startActivity(intent);
-        }
+        }else {
 
-        if (mAdapter.getCount() == 0)
-            loadItems();
+            // If user left a previous apartment, their apartment field will be the empty string
+            if (ParseUser.getCurrentUser().get("apartment").equals("")) {
+                Log.i(TAG, "User has no apartment");
+                Intent intent = new Intent(MainActivity.this, CodeActivity.class);
+                intent.putExtra(USERNAME, ParseUser.getCurrentUser().getUsername());
+                startActivity(intent);
+            }
+
+            if (mAdapter.getCount() == 0)
+                loadItems();
+
+
+        }
     }
 
     @Override
@@ -276,19 +317,40 @@ public class MainActivity extends AppCompatActivity
     // Load stored ToDoItems
     private void loadItems() {
         //load from Parse
-        ParseQuery<ChoreItem> query = ChoreItem.getQuery();
-        query.whereEqualTo("apartment",ParseUser.getCurrentUser().getString("apartment"));
-        query.findInBackground(new FindCallback<ChoreItem>() {
-            @Override
-            public void done(List<ChoreItem> objects, com.parse.ParseException e) {
-                if(e == null) {
-                    for (ChoreItem chore : objects){
-                        Chore newC = new Chore(chore);
-                        mAdapter.add(newC);
+        Intent i = getIntent();
+        int all = i.getIntExtra("all",0);
+        if(all == 1){ //want tasks for full apartment
+            ParseQuery<ChoreItem> query = ChoreItem.getQuery();
+            query.whereEqualTo("apartment",ParseUser.getCurrentUser().getString("apartment"));
+            query.findInBackground(new FindCallback<ChoreItem>() {
+                @Override
+                public void done(List<ChoreItem> objects, com.parse.ParseException e) {
+                    if(e == null) {
+                        for (ChoreItem chore : objects){
+                            Chore newC = new Chore(chore);
+                            mAdapter.add(newC);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }else{ //want tasks just for current user
+            ParseQuery<ChoreItem> query = ChoreItem.getQuery();
+            query.whereEqualTo("apartment",ParseUser.getCurrentUser().getString("apartment"));
+            query.findInBackground(new FindCallback<ChoreItem>() {
+                @Override
+                public void done(List<ChoreItem> objects, com.parse.ParseException e) {
+                    if(e == null) {
+                        for (ChoreItem chore : objects){
+                            if(chore.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
+                                Chore newC = new Chore(chore);
+                                mAdapter.add(newC);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         /*
         BufferedReader reader = null;
         try {

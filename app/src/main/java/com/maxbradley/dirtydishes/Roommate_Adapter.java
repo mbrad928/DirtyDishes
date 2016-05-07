@@ -58,7 +58,7 @@ public class Roommate_Adapter extends BaseAdapter{
     @Override
     public List getItem(int pos) {
 
-       return mItems.get(pos);
+        return mItems.get(pos);
 
     }
 
@@ -81,7 +81,7 @@ public class Roommate_Adapter extends BaseAdapter{
         name_text.setText(name);
         TextView phone_text = (TextView) itemLayout.findViewById(R.id.number);
         phone_text.setText(phone);
-        Button remove = (Button) itemLayout.findViewById(R.id.remove);
+        TextView remove = (TextView) itemLayout.findViewById(R.id.remove);
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
