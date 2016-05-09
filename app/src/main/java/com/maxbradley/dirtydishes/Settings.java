@@ -41,7 +41,6 @@ public class Settings extends AppCompatActivity {
 
         String[] optionsArray = {"Change Nickname",
                 "Change Password",
-                "Change Phone Number",
                 "Leave Apartment"
         };
 
@@ -60,16 +59,15 @@ public class Settings extends AppCompatActivity {
     public boolean itemSelected(int position) {
         if(position == 0){//Change nickanme
             Log.d(TAG, "'Change nickname' selected");
+            Intent intent = new Intent(Settings.this, ChangeNickname.class);
+            startActivity(intent);
 
         } else if (position == 1){//change password
             Log.d(TAG,"'Change password' selected");
             Intent intent = new Intent(Settings.this, ChangePassword.class);
             startActivity(intent);
 
-        } else if (position == 2) {//change phone number
-            Log.d(TAG,"'Change phone number' selected");
-
-        } else if (position == 3) {//leave apartment
+        } else if (position == 2) {//leave apartment
             Log.d(TAG, "'Leave apartment' selected");
 
             Boolean removeFromApartment = false;
