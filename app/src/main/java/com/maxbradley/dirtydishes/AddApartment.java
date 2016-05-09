@@ -57,9 +57,9 @@ public class AddApartment extends AppCompatActivity {
                     for (ParseUser user : objects) {
                         if (user.get("apartment").equals(apartment_code)) {
                             if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-                                mAdapter.add(user.getUsername() + " (self)", "phone number");
+                                mAdapter.add(user.getUsername() + " (self)");
                             } else {
-                                mAdapter.add(user.getUsername(), "phone number");
+                                mAdapter.add(user.getUsername());
                             }
                         }
 
@@ -88,7 +88,7 @@ public class AddApartment extends AppCompatActivity {
                 // Have permission, can now send SMS
                 sendSMS(phone.getText().toString(), "hey " + name.getText().toString() + "! You've been added to a room on " +
                         "RoomMe! Download RoomMe, create an account, and enter code: " + apartment_code + " to join!"); //send code here
-                mAdapter.add(name.getText().toString(), phone.getText().toString());
+                mAdapter.add(name.getText().toString());
                 name.setText("");
                 phone.setText("");
             }
