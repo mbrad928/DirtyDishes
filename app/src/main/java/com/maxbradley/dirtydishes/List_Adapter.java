@@ -2,7 +2,9 @@ package com.maxbradley.dirtydishes;
 
 import android.app.ListActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -97,6 +99,26 @@ public class List_Adapter extends BaseAdapter {
 
         final Button statusView = (Button)itemLayout.findViewById(R.id.complete);
         //statusView.setChecked(toDoItem.getStatus().equals(Chore.Status.DONE));
+
+        Calendar calendar = Calendar.getInstance();
+        int thisMonth = calendar.get(Calendar.MONTH) + 1; //starts at 0
+        int thisDay = calendar.get(Calendar.DAY_OF_MONTH);
+        SimpleDateFormat simpleDate =  new SimpleDateFormat("MM-dd");
+
+
+        String chore_date = simpleDate.format(toDoItem.getDate());
+        String[] date = chore_date.split("-");
+        int month = Integer.parseInt(date[0]);
+        int day = Integer.parseInt(date[1]);
+        if(month > thisMonth){
+            
+        }else if(month == thisMonth){
+            if(day > thisDay){
+
+            }
+        }else{
+
+        }
 
         statusView.setOnClickListener(new View.OnClickListener() {
             @Override

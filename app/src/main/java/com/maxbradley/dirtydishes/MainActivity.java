@@ -328,28 +328,12 @@ public class MainActivity extends AppCompatActivity
             query.findInBackground(new FindCallback<ChoreItem>() {
                 @Override
                 public void done(List<ChoreItem> objects, com.parse.ParseException e) {
-                    Calendar calendar = Calendar.getInstance();
-                    //Date today = calender.getTime();
-                    int thisMonth = calendar.get(Calendar.MONTH) + 1; //starts at 0
-                    int thisDay = calendar.get(Calendar.DAY_OF_MONTH);
-                    SimpleDateFormat simpleDate =  new SimpleDateFormat("MM-dd");
+
                     if(e == null) {
                         for (ChoreItem chore : objects){
                             Chore newC = new Chore(chore);
-                            String chore_date = simpleDate.format(newC.getDate());
-                            String[] date = chore_date.split("-");
-                            int month = Integer.parseInt(date[0]);
-                            int day = Integer.parseInt(date[1]);
-                            if(month > thisMonth){
-                                mAdapter.add(newC);
-                            }else if(month == thisMonth){
-                                if(day > thisDay){
-                                    mAdapter.add(newC);
-                                }
-                            }else{
-                                Log.i("Date invalid", "Date invalid");
-                            }
-                            //mAdapter.add(newC);
+
+                            mAdapter.add(newC);
 
                         }
                     }
