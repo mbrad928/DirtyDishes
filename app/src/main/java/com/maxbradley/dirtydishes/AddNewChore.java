@@ -73,6 +73,8 @@ public class AddNewChore extends AppCompatActivity {
 
     private static TextView user;
 
+    private String assignedUser;
+
 
 
 
@@ -239,11 +241,11 @@ public class AddNewChore extends AppCompatActivity {
                     newChore.setPerson(person);
                     newChore.saveInBackground();
 
-                    Intent data = new Intent();
+                 /*   Intent data = new Intent();
                     Chore.packageIntent(data, titleString, priority, status,
                             fullDate, person);
 
-                    setResult(RESULT_OK, data);
+                    setResult(RESULT_OK, data);*/
                     finish();
 
                 }else{
