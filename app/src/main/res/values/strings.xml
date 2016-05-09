@@ -1,4 +1,12 @@
 <resources>
-    <string name="app_name">DirtyDishes</string>
+    <string name="app_name">RoomMe</string>
     <string name="action_settings">Settings</string>
+    <string-array name="chores_array">
+        <item>-Please Select-</item>
+        <item>Do the Dishes</item>
+        <item>Take out the Trash</item>
+        <item>Take out the Recycling</item>
+        <item>Vacuum</item>
+        <item>Clean the Bathroom</item>
+    </string-array>
 </resources>

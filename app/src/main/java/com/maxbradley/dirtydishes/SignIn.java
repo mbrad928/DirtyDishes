@@ -1,17 +1,23 @@
 package com.maxbradley.dirtydishes;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 /**
  * Created by Cameron on 4/24/2016.
  */
-public class SignIn extends Activity {
+public class SignIn extends AppCompatActivity {
 
 
     private EditText userNameText;
@@ -36,16 +42,31 @@ public class SignIn extends Activity {
             @Override
             public void onClick(View v) {
 
-                String username = userNameText.getText().toString();
-                String password = passwordText.getText().toString();
+                final String username = userNameText.getText().toString();
+                final String password = passwordText.getText().toString();
 
-                /* Create intent, pack data into intent and return */
-                Intent data = new Intent();
-                data.putExtra(MainActivity.USERNAME, username);
-                data.putExtra(MainActivity.PASSWORD, password);
-                data.putExtra(MainActivity.CREATE_OR_SIGN_IN,MainActivity.SIGN_IN);
-                setResult(RESULT_OK, data);
-                finish();
+                final ProgressDialog dialog = new ProgressDialog(SignIn.this);
+                dialog.setMessage("Signing in...");
+                dialog.show();
+
+                ParseUser.logInInBackground(username, password, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser user, ParseException e) {
+                        dialog.dismiss();
+                        if (e != null) {
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        } else {
+                            /* Create intent, pack data into intent and return */
+                            Intent data = new Intent(SignIn.this,MainActivity.class);
+                            data.putExtra(MainActivity.USERNAME, username);
+                            data.putExtra(MainActivity.PASSWORD, password);
+                            //data.putExtra(MainActivity.CREATE_OR_SIGN_IN, MainActivity.SIGN_IN);
+                           // setResult(RESULT_OK, data);
+                           // finish();
+                            startActivity(data);
+                        }
+                    }
+                });
 
             }
         });
@@ -55,18 +76,19 @@ public class SignIn extends Activity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(SignIn.this,CreateAccount.class);
-                startActivityForResult(intent, MainActivity.REQUEST_CREATE_ACCOUNT);
+                startActivity(intent);
+              //  startActivityForResult(intent, MainActivity.REQUEST_CREATE_ACCOUNT);
 
             }
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        /*cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setResult(RESULT_CANCELED);
                 finish();
             }
-        });
+        });*/
 
     }
 

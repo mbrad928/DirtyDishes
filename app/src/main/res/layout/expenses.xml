@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expenses"
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="due by: 5/25/2016"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@android:color/holo_red_light"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        />
+
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+        <TableRow>
+            <TextView
+                android:text="Rent"
+                android:padding="3dip"
+                android:textSize="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"/>
+
+
+            <TextView
+                android:text="600"
+                android:gravity="right"
+                android:textSize="20dp"
+                android:padding="3dip"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:text="Paid"
+                android:textSize="20dp"
+                android:gravity="right"
+                android:padding="3dip"
+                android:layout_marginRight="30dp"
+                android:textColor="@android:color/holo_green_dark"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Water"
+                android:padding="3dip"
+                android:textSize="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"/>
+            <TextView
+                android:text="200"
+                android:gravity="right"
+                android:textSize="20dp"
+                android:padding="3dip"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:text="Paid"
+                android:textSize="20dp"
+                android:gravity="right"
+                android:padding="3dip"
+                android:layout_marginRight="30dp"
+                android:textColor="@android:color/holo_green_dark"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Electric"
+                android:padding="3dip"
+                android:textSize="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"/>
+            <TextView
+                android:text="200"
+                android:gravity="right"
+                android:textSize="20dp"
+                android:padding="3dip"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:text="Paid"
+                android:textSize="20dp"
+                android:gravity="right"
+                android:padding="3dip"
+                android:layout_marginRight="30dp"
+                android:textColor="@android:color/holo_green_dark"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Internet"
+                android:padding="3dip"
+                android:textSize="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"/>
+            <TextView
+                android:text="200"
+                android:gravity="right"
+                android:textSize="20dp"
+                android:padding="3dip"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:text="Pay"
+                android:textSize="20dp"
+                android:gravity="right"
+                android:padding="3dip"
+                android:layout_marginRight="30dp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Total"
+                android:padding="3dip"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"
+                android:textSize="20dp"/>
+            <TextView
+                android:text="1200.00"
+                android:gravity="right"
+                android:layout_marginRight="30dp"
+                android:padding="3dip"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"
+                android:textSize="20dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Paid"
+                android:padding="3dip"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"
+                android:textSize="20dp"/>
+            <TextView
+                android:text="1000.00"
+                android:gravity="right"
+                android:layout_marginRight="30dp"
+                android:padding="3dip"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"
+                android:textSize="20dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="Owe"
+                android:padding="3dip"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"
+                android:textSize="20dp"/>
+            <TextView
+                android:text="200.00"
+                android:gravity="right"
+                android:layout_marginRight="30dp"
+                android:padding="3dip"
+                android:background="@drawable/cell_shape"
+                android:layout_weight="1"
+                android:textSize="20dp"/>
+        </TableRow>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:src="@android:drawable/ic_input_add"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_marginBottom="33dp"
+            android:layout_marginTop="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="36dp" />
+    </TableLayout>
+
+
+
+</LinearLayout>

@@ -21,7 +21,7 @@ import java.util.List;
  * Created by Christine Schroeder on 4/20/2016.
  */
 public class Roommate_Adapter extends BaseAdapter{
-    private final List<List> mItems = new ArrayList<>();
+    private final List<String> mItems = new ArrayList<>();
     private final Context mContext;
 
 
@@ -31,12 +31,9 @@ public class Roommate_Adapter extends BaseAdapter{
 
     }
 
-    public void add(String name, String phonenumber) {
+    public void add(String name) {
 
-        List temp = new ArrayList<>();
-        temp.add(name);
-        temp.add(phonenumber);
-        mItems.add(temp);
+        mItems.add(name);
         notifyDataSetChanged();
 
     }
@@ -56,9 +53,9 @@ public class Roommate_Adapter extends BaseAdapter{
     }
 
     @Override
-    public List getItem(int pos) {
+    public String getItem(int pos) {
 
-       return mItems.get(pos);
+        return mItems.get(pos);
 
     }
 
@@ -72,23 +69,12 @@ public class Roommate_Adapter extends BaseAdapter{
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        final List roomie = getItem(position);
-        String name = (String)roomie.get(0);
-        String phone = (String)roomie.get(1);
+        final String name = getItem(position);
 
         LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.roommate, parent, false);
         TextView name_text = (TextView) itemLayout.findViewById(R.id.name);
         name_text.setText(name);
-        TextView phone_text = (TextView) itemLayout.findViewById(R.id.number);
-        phone_text.setText(phone);
-        Button remove = (Button) itemLayout.findViewById(R.id.remove);
-        remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mItems.remove(position);
-                notifyDataSetChanged();
-            }
-        });
+
 
         return itemLayout;
 

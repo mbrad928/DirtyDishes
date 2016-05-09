@@ -2,32 +2,28 @@ package com.maxbradley.dirtydishes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.maxbradley.dirtydishes.Chore.Priority;
-import com.maxbradley.dirtydishes.Chore.Status;
+import com.parse.FindCallback;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -53,7 +49,7 @@ public class MainActivity extends AppCompatActivity
 
     // IDs for menu items
     private static final int MENU_DELETE = Menu.FIRST;
-    private static final int MENU_DUMP = Menu.FIRST + 1;
+    private static final int MENU_LOGOUT = Menu.FIRST + 1;
 
 
     /* If false, take user to sign-in/create account screen
@@ -65,8 +61,6 @@ public class MainActivity extends AppCompatActivity
     private ArrayAdapter<String> drawerAdapter;
 
 
-
-
     List_Adapter mAdapter;
 
     ListView listView;
@@ -74,20 +68,37 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //place any custom ParseObject classes here
+/* How to add a ParseObject
+        ParseObject testObject = new ParseObject("NewObject");
+        testObject.put("Key",1000);
+        testObject.put("Name","Max");
+        testObject.saveInBackground();
+        Log.d(TAG, "put object");
+*/
         setContentView(R.layout.activity_main);
         mAdapter = new List_Adapter(getApplicationContext());
 
         listView = (ListView) findViewById(R.id.listView);
         mDrawerList = (ListView) findViewById(R.id.nav_list);
 
-        String[] optionsArray = {"Chore list",
+        String[] optionsArray = {"View Your Chores",
+                "View All Chores",
                 "Expenses",
-                "Calendar",
+                "Add People",
                 "Settings"
         };
         drawerAdapter =
                 new ArrayAdapter<String>(this,R.layout.drawer_item,optionsArray);
         mDrawerList.setAdapter(drawerAdapter);
+
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header_news = (ViewGroup)inflater.inflate(R.layout.drawer_header, mDrawerList, false);
+        TextView name = (TextView) header_news.findViewById(R.id.username);
+        name.setText(ParseUser.getCurrentUser().getUsername());
+        mDrawerList.addHeaderView(header_news, null, false);
+
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -96,30 +107,56 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        userSignedIn = getIntent().getBooleanExtra("signedIn",false);
+
+
+        //  userSignedIn = getIntent().getBooleanExtra("signedIn",false);
 
         /* Take user to sign-in activity if not already signed in */
-        if (!userSignedIn) {
+  /*      if (!userSignedIn) {
             Intent intent = new Intent(MainActivity.this, SignIn.class);
             startActivityForResult(intent, SIGN_IN_REQUEST_CODE);
         }
 
+*/
 
-        listView.setFooterDividersEnabled(true);
 
-        TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer, null);
-
-        listView.addFooterView(footerView);
-        footerView.setOnClickListener(new OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddNewChore.class);
                 startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
             }
         });
 
+        // TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer, null);
+
+        //  listView.addFooterView(footerView);
+        //   footerView.setOnClickListener(new OnClickListener() {
+        //      @Override
+        //      public void onClick(View v) {
+
+        //     Intent intent = new Intent(MainActivity.this, AddNewChore.class);
+        //        startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
+        //   }
+        //   });
+
+
         listView.setAdapter(mAdapter);
+        //LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.task_header, mDrawerList, false);
+        TextView title = (TextView) header.findViewById(R.id.title);
+        Intent i = getIntent();
+        int all = i.getIntExtra("all",0);
+        if(all == 1){
+            title.setText("All Chores");
+        }else{
+            title.setText("Your Chores");
+        }
+
+        listView.addHeaderView(header, null, false);
+        listView.setHeaderDividersEnabled(true);
+
 
     }
 
@@ -131,7 +168,9 @@ public class MainActivity extends AppCompatActivity
 
             if (requestCode == ADD_TODO_ITEM_REQUEST) {
                 Chore item = new Chore(data);
-                mAdapter.add(item);
+                if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
+                    mAdapter.add(item);
+                }
 
             } else if (requestCode == SIGN_IN_REQUEST_CODE) {
 
@@ -147,7 +186,6 @@ public class MainActivity extends AppCompatActivity
                     Log.i(TAG, "User wants to sign in to existing account");
                     Log.i(TAG, "Username: " + username + ", Password: " + password);
 
-                    /* TODO - check database for username/password combination */
 
 
                 /* User CREATING NEW ACCOUNT */
@@ -159,7 +197,6 @@ public class MainActivity extends AppCompatActivity
                     Log.i(TAG, "User wants to create account");
                     Log.i(TAG, "Username: " + username + ", Password: " + password);
 
-                    /* TODO - add account information to database */
 
                     /* Go to code entry/generation */
                     Intent intent = new Intent(MainActivity.this, CodeActivity.class);
@@ -183,13 +220,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     public boolean itemSelected(int position) {
-        if(position == 0){
-            Log.d(TAG,"First item selected");
-        } else if (position == 1){
-            Log.d(TAG,"Second item selected");
+        if(position == 1){//View Your Chores
+            Log.d(TAG, "'View Your Chores' selected");
+            Intent i = new Intent(MainActivity.this,MainActivity.class);
+            startActivity(i);
+        } else if (position == 2){//View all Chores
+            Log.d(TAG, "'View all Chores' selected");
+            Intent i = new Intent(MainActivity.this,MainActivity.class);
+            i.putExtra("all",1);
+            startActivity(i);
+        } else if (position == 3) {// Expenses
+            Log.d(TAG, "'Expenses' selected");
+            Intent i = new Intent(MainActivity.this,Expenses.class);
+            startActivity(i);
+        } else if (position == 4) {//Add people
+            Log.d(TAG, "'Add people' selected");
+            Intent i = new Intent(MainActivity.this,AddApartment.class);
+            startActivity(i);
+
+
+        }else if(position == 5) { //Settings
+            Log.d(TAG,"'Settings' selected");
+            Intent intent = new Intent(MainActivity.this, Settings.class);
+            startActivity(intent);
         }
-
-
         return true;
     }
 
@@ -198,8 +252,25 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
-        if (mAdapter.getCount() == 0)
-            loadItems();
+        if(ParseUser.getCurrentUser().get("apartment")==null){
+            Log.i(TAG, "User's apartment is null");
+            Intent intent = new Intent(MainActivity.this, SignIn.class);
+            startActivity(intent);
+        }else {
+
+            // If user left a previous apartment, their apartment field will be the empty string
+            if (ParseUser.getCurrentUser().get("apartment").equals("")) {
+                Log.i(TAG, "User has no apartment");
+                Intent intent = new Intent(MainActivity.this, CodeActivity.class);
+                intent.putExtra(USERNAME, ParseUser.getCurrentUser().getUsername());
+                startActivity(intent);
+            }
+
+            if (mAdapter.getCount() == 0)
+                loadItems();
+
+
+        }
     }
 
     @Override
@@ -217,7 +288,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreateOptionsMenu(menu);
 
         menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete all");
-        menu.add(Menu.NONE, MENU_DUMP, Menu.NONE, "Dump to log");
+        menu.add(Menu.NONE, MENU_LOGOUT, Menu.NONE, "Logout");
         return true;
     }
 
@@ -227,8 +298,10 @@ public class MainActivity extends AppCompatActivity
             case MENU_DELETE:
                 mAdapter.clear();
                 return true;
-            case MENU_DUMP:
-                dump();
+            case MENU_LOGOUT:
+                ParseUser.logOut();
+                Intent intent = new Intent(MainActivity.this,SignIn.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -246,6 +319,45 @@ public class MainActivity extends AppCompatActivity
 
     // Load stored ToDoItems
     private void loadItems() {
+        //load from Parse
+        Intent i = getIntent();
+        int all = i.getIntExtra("all",0);
+        if(all == 1){ //want tasks for full apartment
+            ParseQuery<ChoreItem> query = ChoreItem.getQuery();
+            query.whereEqualTo("apartment",ParseUser.getCurrentUser().getString("apartment"));
+            query.findInBackground(new FindCallback<ChoreItem>() {
+                @Override
+                public void done(List<ChoreItem> objects, com.parse.ParseException e) {
+
+                    if(e == null) {
+                        for (ChoreItem chore : objects){
+                            Chore newC = new Chore(chore);
+
+                            mAdapter.add(newC);
+
+                        }
+                    }
+                }
+            });
+        }else{ //want tasks just for current user
+            ParseQuery<ChoreItem> query = ChoreItem.getQuery();
+            query.whereEqualTo("apartment",ParseUser.getCurrentUser().getString("apartment"));
+            query.findInBackground(new FindCallback<ChoreItem>() {
+                @Override
+                public void done(List<ChoreItem> objects, com.parse.ParseException e) {
+                    if(e == null) {
+                        for (ChoreItem chore : objects){
+                            if(chore.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
+                                Chore newC = new Chore(chore);
+                                mAdapter.add(newC);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /*
         BufferedReader reader = null;
         try {
             FileInputStream fis = openFileInput(FILE_NAME);
@@ -278,10 +390,14 @@ public class MainActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
     }
 
     private void saveItems() {
+        //no need to save b/c of Parse
+
+    }
+        /*
         PrintWriter writer = null;
         try {
             FileOutputStream fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
@@ -300,7 +416,7 @@ public class MainActivity extends AppCompatActivity
                 writer.close();
             }
         }
-    }
+    }*/
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

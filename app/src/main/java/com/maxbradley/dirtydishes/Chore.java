@@ -29,15 +29,29 @@ public class Chore {
             "yyyy-MM-dd HH:mm:ss", Locale.US);
 
     private String mTitle = new String();
+    private String mPerson = new String();
     private Priority mPriority = Priority.LOW;
     private Status mStatus = Status.NOTDONE;
     private Date mDate = new Date();
 
-    Chore(String title, Priority priority, Status status, Date date) {
+    Chore(String title, Priority priority, Status status, Date date, String person) {
         this.mTitle = title;
         this.mPriority = priority;
         this.mStatus = status;
         this.mDate = date;
+        this.mPerson = person;
+    }
+
+    Chore(ChoreItem item){
+        this.mTitle = item.getTitle();
+        this.mPriority = Priority.values()[item.getPriority()];
+        this.mStatus = Status.values()[item.getStatus()];
+        this.mPerson = item.getPerson();
+        try {
+            this.mDate = Chore.FORMAT.parse(item.getDate());
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -46,6 +60,7 @@ public class Chore {
         mTitle = intent.getStringExtra(Chore.TITLE);
         mPriority = Priority.valueOf(intent.getStringExtra(Chore.PRIORITY));
         mStatus = Status.valueOf(intent.getStringExtra(Chore.STATUS));
+        mPerson = intent.getStringExtra("Person");
 
         try {
             mDate = Chore.FORMAT.parse(intent.getStringExtra(Chore.DATE));
@@ -70,6 +85,8 @@ public class Chore {
         mPriority = priority;
     }
 
+    public String getPerson(){return mPerson;}
+
     public Status getStatus() {
         return mStatus;
     }
@@ -87,12 +104,13 @@ public class Chore {
     }
 
     public static void packageIntent(Intent intent, String title,
-                                     Priority priority, Status status, String date) {
+                                     Priority priority, Status status, String date, String person) {
 
         intent.putExtra(Chore.TITLE, title);
         intent.putExtra(Chore.PRIORITY, priority.toString());
         intent.putExtra(Chore.STATUS, status.toString());
         intent.putExtra(Chore.DATE, date);
+        intent.putExtra("Person", person);
 
     }
 
