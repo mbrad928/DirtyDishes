@@ -192,27 +192,36 @@ public class AddNewChore extends AppCompatActivity {
                 Chore.Status status = Chore.Status.NOTDONE;
 
                 String person = getRoommate(roommate_names);
-                Log.i("person is ",person);
-                String titleString =  getToDoTitle();
+
+                if(person != null) {
+                    Log.i("person is ", person);
+                    String titleString = getToDoTitle();
 
 
-                String fullDate = dateString + " " + timeString;
-                ChoreItem newChore = new ChoreItem();
-                newChore.setUser(ParseUser.getCurrentUser());
-                newChore.setApartment(ParseUser.getCurrentUser().getString("apartment"));
-                newChore.setTitle(titleString);
-                newChore.setPriority(priority.ordinal());
-                newChore.setStatus(status.ordinal());
-                newChore.setDate(fullDate);
-                newChore.setPerson(person);
-                newChore.saveInBackground();
+                    String fullDate = dateString + " " + timeString;
+                    ChoreItem newChore = new ChoreItem();
+                    newChore.setUser(ParseUser.getCurrentUser());
+                    newChore.setApartment(ParseUser.getCurrentUser().getString("apartment"));
+                    newChore.setTitle(titleString);
+                    newChore.setPriority(priority.ordinal());
+                    newChore.setStatus(status.ordinal());
+                    newChore.setDate(fullDate);
+                    newChore.setPerson(person);
+                    newChore.saveInBackground();
 
-                Intent data = new Intent();
-                Chore.packageIntent(data, titleString, priority, status,
-                        fullDate,person);
+                    Intent data = new Intent();
+                    Chore.packageIntent(data, titleString, priority, status,
+                            fullDate, person);
 
-                setResult(RESULT_OK, data);
-                finish();
+                    setResult(RESULT_OK, data);
+                    finish();
+
+                }else{
+                    Toast t = Toast.makeText(getApplicationContext(),
+                            "Please choose which roommate you want to assign the chore to",
+                            Toast.LENGTH_LONG);
+                    t.show();
+                }
 
             }
         });
@@ -280,10 +289,14 @@ public class AddNewChore extends AppCompatActivity {
 
     private String getRoommate(ArrayList<String> roommates){
         int id = roomates_radio.getCheckedRadioButtonId();
-        //for(String roomie : roommates){
-        Log.i("id checked is",""+id);
-        return roommates.get(id-1);
-        //}
+
+        if(id != -1) {
+            Log.i("id checked is", "" + id);
+            return roommates.get(id - 1);
+        }else{
+            return null;
+        }
+
 
     }
 

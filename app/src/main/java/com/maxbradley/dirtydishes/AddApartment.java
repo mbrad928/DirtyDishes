@@ -1,30 +1,27 @@
 package com.maxbradley.dirtydishes;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -77,6 +74,18 @@ public class AddApartment extends AppCompatActivity {
             public void onClick(View v) {
                 EditText name = (EditText) findViewById(R.id.name);
                 EditText phone = (EditText) findViewById(R.id.phone);
+
+                // Requesting permission to send SMS
+                int permission = ActivityCompat.checkSelfPermission(AddApartment.this,
+                        "android.permission.SEND_SMS");
+
+                if (permission == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(AddApartment.this,
+                            new String[]{"android.permission.SEND_SMS"},
+                            1);
+                }
+
+                // Have permission, can now send SMS
                 sendSMS(phone.getText().toString(), "hey " + name.getText().toString() + "! You've been added to a room on " +
                         "RoomMe! Download RoomMe, create an account, and enter code: " + apartment_code + " to join!"); //send code here
                 mAdapter.add(name.getText().toString(), phone.getText().toString());

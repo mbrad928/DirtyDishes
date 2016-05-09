@@ -1,11 +1,9 @@
 package com.maxbradley.dirtydishes;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,31 +46,46 @@ public class CreateAccount extends AppCompatActivity {
 
                 if ( password.equals(confirmPass) ){
 
+                    if (username.equals("")){
+                        Toast t = Toast.makeText(getApplicationContext(),
+                                "Username cannot be blank",
+                                Toast.LENGTH_LONG);
+                        t.show();
+                        reset();
 
-                    //set up a progress dialog
-                    final ProgressDialog dialog = new ProgressDialog(CreateAccount.this);
-                    dialog.setMessage("Sign up in progress...");
-                    dialog.show();
+                    }else if (password.equals("")){
+                        Toast t = Toast.makeText(getApplicationContext(),
+                                "Password cannot be blank",
+                                Toast.LENGTH_LONG);
+                        t.show();
+                        reset();
 
-                    //set up a new parseuser
-                    ParseUser newUser = new ParseUser();
-                    newUser.setUsername(username);
-                    newUser.setPassword(password);
+                    }else{
 
-                    //Call parse signup method
-                    newUser.signUpInBackground(new SignUpCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            dialog.dismiss();
-                            if (e != null) {
-                                //Show error message
-                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            } else {
+                        //set up a progress dialog
+                        final ProgressDialog dialog = new ProgressDialog(CreateAccount.this);
+                        dialog.setMessage("Sign up in progress...");
+                        dialog.show();
+
+                        //set up a new parseuser
+                        ParseUser newUser = new ParseUser();
+                        newUser.setUsername(username);
+                        newUser.setPassword(password);
+
+                        //Call parse signup method
+                        newUser.signUpInBackground(new SignUpCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                dialog.dismiss();
+                                if (e != null) {
+                                    //Show error message
+                                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                } else {
                                 /* Create intent, pack data into intent and return */
-                                Intent intent = new Intent(CreateAccount.this,CodeActivity.class);
-                                intent.putExtra(MainActivity.USERNAME, username);
-                                intent.putExtra(MainActivity.PASSWORD, password);
-                                startActivity(intent);
+                                    Intent intent = new Intent(CreateAccount.this, CodeActivity.class);
+                                    intent.putExtra(MainActivity.USERNAME, username);
+                                    intent.putExtra(MainActivity.PASSWORD, password);
+                                    startActivity(intent);
 
                                 /*
                                 Intent data = new Intent();
@@ -82,9 +95,10 @@ public class CreateAccount extends AppCompatActivity {
                                 setResult(RESULT_OK, data);
                                 finish();
                                 */
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
 
 
 
