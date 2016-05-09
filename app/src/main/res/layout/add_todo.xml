@@ -1,160 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:scrollbarAlwaysDrawVerticalTrack="true">
+    android:isScrollContainer="true">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="30dp"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Assign Task To:"
-            android:textSize="20dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="30dp">
 
-        <RadioGroup
-            android:id="@+id/roomates_radio"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="Assign Task To:"
+                android:textSize="20dp" />
+
+            <RadioGroup
+                android:id="@+id/roomates_radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:text="Assign Task To:">
+
+            </RadioGroup>
+
+
+        </LinearLayout>
+
+
+        <!-- Title -->
+
+        <TextView
+            android:id="@+id/TitleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:text="Please Choose the Chore from the Drop Down list or enter the custom name below"
+            android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+
+        <Spinner
+            android:id="@+id/chores_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="30dp"></Spinner>
+
+        <EditText
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:text="Assign Task To:" >
+            android:layout_below="@+id/chores_spinner"
+            android:layout_marginTop="14dp"
+            android:ems="10"
+            android:hint="Enter Title"
+            android:inputType="textShortMessage">
 
+            <requestFocus />
+        </EditText>
+
+
+        <Button
+            android:id="@+id/date_picker_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Choose Date" />
+
+        <Button
+            android:id="@+id/time_picker_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/date_picker_button"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:text="Choose Time" />
+
+        <!-- Priority -->
+
+        <TextView
+            android:id="@+id/priority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/title"
+            android:layout_marginTop="25dp"
+            android:text="Prioirity"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <RadioGroup
+            android:id="@+id/priorityGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/priority"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:text="Prioirity">
+
+            <RadioButton
+                android:id="@+id/lowPriority"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Low" />
+
+            <RadioButton
+                android:id="@+id/medPriority"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Medium" />
+
+            <RadioButton
+                android:id="@+id/highPriority"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="High" />
         </RadioGroup>
 
 
-    </LinearLayout>
-
-
-    <!-- Title -->
-
-    <TextView
-        android:paddingTop="10dp"
-        android:id="@+id/TitleLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Please Choose the Chore from the Drop Down list or enter the custom name below"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:gravity="center"
-        android:layout_marginTop="20dp">
-    </TextView>
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/chores_spinner"
-
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp"></Spinner>
-
-    <EditText
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/chores_spinner"
-        android:layout_marginTop="14dp"
-        android:ems="10"
-        android:hint="Enter Title"
-        android:inputType="textShortMessage">
-
-        <requestFocus />
-    </EditText>
-
-
-    <Button
-        android:id="@+id/date_picker_button"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentLeft="true"
-        android:layout_gravity="center"
-        android:text="Choose Date" />
-
-    <Button
-        android:id="@+id/time_picker_button"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/date_picker_button"
-        android:layout_gravity="center"
-        android:text="Choose Time"
-        android:layout_marginBottom="10dp"/>
-
-    <!-- Priority -->
-
-    <TextView
-        android:id="@+id/priority"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/title"
-        android:layout_marginTop="25dp"
-        android:text="Prioirity"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <RadioGroup
-        android:id="@+id/priorityGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/priority"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp"
-        android:text="Prioirity" >
-
-        <RadioButton
-            android:id="@+id/lowPriority"
+        <!-- Buttons -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Low" />
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/medPriority"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Medium" />
+            <Button
+                android:id="@+id/submitButton"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="Submit" />
 
-        <RadioButton
-            android:id="@+id/highPriority"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="High" />
-    </RadioGroup>
+            <Button
+                android:id="@+id/cancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-
-
-
-    <!-- Buttons -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="25dp">
-        <Button
-            android:id="@+id/submitButton"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:text="Submit" />
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="Cancel" />
+                android:text="Cancel" />
 
 
-
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>
