@@ -16,9 +16,11 @@ public class StartingActivity extends Activity {
         if(ParseUser.getCurrentUser() != null){
             //start main activity
             startActivity(new Intent(this,MainActivity.class));
+            finish();
         } else {
             //sign in
             startActivity(new Intent(this,SignIn.class));
+            finish();
         }
     }
 }

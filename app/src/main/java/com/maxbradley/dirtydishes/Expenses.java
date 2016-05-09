@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,15 +26,16 @@ public class Expenses extends AppCompatActivity {
     private ArrayAdapter<String> drawerAdapter;
 
     // IDs for menu items
-    private static final int MENU_DELETE = Menu.FIRST;
-    private static final int MENU_LOGOUT = Menu.FIRST + 1;
+    private static final int MENU_LOGOUT = Menu.FIRST;
+
+    private static final String TAG = "Expenses";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.expenses);
 
-        /*mDrawerList = (ListView) findViewById(R.id.nav_list);
+        mDrawerList = (ListView) findViewById(R.id.nav_list);
 
         String[] optionsArray = {"View Your Chores",
                 "View All Chores",
@@ -57,20 +59,50 @@ public class Expenses extends AppCompatActivity {
                 itemSelected(position);
 
             }
-        });*/
+        });
+
 
     }
 
-    /*public void itemSelected(int pos){
-        MainActivity.itemSelected(pos);
-    }*/
+    public boolean itemSelected(int position) {
+        if(position == 1){//View Your Chores
+            Log.d(TAG, "'View Your Chores' selected");
+            Intent i = new Intent(Expenses.this,MainActivity.class);
+            startActivity(i);
+        } else if (position == 2){//View all Chores
+            Log.d(TAG, "'View all Chores' selected");
+            Intent i = new Intent(Expenses.this,MainActivity.class);
+            i.putExtra("all",1);
+            startActivity(i);
+        } else if (position == 3) {// Expenses
+            Log.d(TAG, "'Expenses' selected");
+            Intent i = new Intent(Expenses.this,Expenses.class);
+            startActivity(i);
+        } else if (position == 4) {//Add people
+            Log.d(TAG, "'Add people' selected");
+            Intent i = new Intent(Expenses.this,AddApartment.class);
+            startActivity(i);
+
+
+        }else if(position == 5) { //Settings
+            Log.d(TAG,"'Settings' selected");
+            Intent intent = new Intent(Expenses.this, Settings.class);
+            startActivity(intent);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        menu.add(Menu.NONE, MENU_LOGOUT, Menu.NONE, "Logout");
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_DELETE:
-
-                return true;
             case MENU_LOGOUT:
                 ParseUser.logOut();
                 Intent intent = new Intent(Expenses.this,SignIn.class);

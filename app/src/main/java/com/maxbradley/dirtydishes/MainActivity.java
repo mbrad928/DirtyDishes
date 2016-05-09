@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity
     private static final int ADD_TODO_ITEM_REQUEST = 0;
     private static final int SIGN_IN_REQUEST_CODE = 1;
 
-    private static final String FILE_NAME = "TodoManagerActivityData.txt";
     private static final String TAG = "Lab-UserInterface";
 
     /*  For use with sign-in/create account activity */
@@ -48,8 +47,7 @@ public class MainActivity extends AppCompatActivity
 
 
     // IDs for menu items
-    private static final int MENU_DELETE = Menu.FIRST;
-    private static final int MENU_LOGOUT = Menu.FIRST + 1;
+    private static final int MENU_LOGOUT = Menu.FIRST;
 
 
     /* If false, take user to sign-in/create account screen
@@ -69,15 +67,9 @@ public class MainActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //place any custom ParseObject classes here
-/* How to add a ParseObject
-        ParseObject testObject = new ParseObject("NewObject");
-        testObject.put("Key",1000);
-        testObject.put("Name","Max");
-        testObject.saveInBackground();
-        Log.d(TAG, "put object");
-*/
+
         setContentView(R.layout.activity_main);
+
         mAdapter = new List_Adapter(getApplicationContext());
 
         listView = (ListView) findViewById(R.id.listView);
@@ -252,6 +244,8 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
+        // if current user is null this screws up big
+
         if(ParseUser.getCurrentUser().get("apartment")==null){
             Log.i(TAG, "User's apartment is null");
             Intent intent = new Intent(MainActivity.this, SignIn.class);
@@ -266,8 +260,10 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
 
-            if (mAdapter.getCount() == 0)
+            if (mAdapter.getCount() == 0) {
+                Log.d(TAG,"load");
                 loadItems();
+            }
 
 
         }
@@ -287,7 +283,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete all");
         menu.add(Menu.NONE, MENU_LOGOUT, Menu.NONE, "Logout");
         return true;
     }
@@ -295,9 +290,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_DELETE:
-                mAdapter.clear();
-                return true;
             case MENU_LOGOUT:
                 ParseUser.logOut();
                 Intent intent = new Intent(MainActivity.this,SignIn.class);

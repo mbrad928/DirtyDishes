@@ -110,19 +110,27 @@ public class CodeActivity extends AppCompatActivity {
                     public void done(ParseException e) {
                         if (e == null) {
                             ParseUser.getCurrentUser().put("apartment", apartment.getApartmentCode());
-                            ParseUser.getCurrentUser().saveInBackground();
+                            ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        Intent data = new Intent(CodeActivity.this, MainActivity.class);
+                                        data.putExtra(MainActivity.USERNAME, username);
+                                        if (null != password) {
+                                            data.putExtra(MainActivity.PASSWORD, password);
+                                        }
+                                        startActivity(data);
+                                        finish();
+                                    }
+                                }
+                            });
                         }
                     }
                 });
                 //Apartment objectId is also the code
 
 
-                Intent data = new Intent(CodeActivity.this, MainActivity.class);
-                data.putExtra(MainActivity.USERNAME, username);
-                if (null != password) {
-                    data.putExtra(MainActivity.PASSWORD, password);
-                }
-                startActivity(data);
+
 
                 /*
 

@@ -7,7 +7,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.maxbradley.dirtydishes.MainActivity">
+    >
     <!--android:fitsSystemWindows="true"-->
 
     <!-- Toolbar view -->
@@ -63,7 +63,7 @@
         android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="left|start"
-        android:background="#66ff66"/>
+        android:background="#f2f2f2"/>
 
 
     <!--<include layout="@layout/content_main" />-->
