@@ -45,23 +45,6 @@ public class CreateAccount extends AppCompatActivity {
                 String confirmPass = confirmPasswordText.getText().toString();
 
                 if ( password.equals(confirmPass) ){
-
-                    if (username.equals("")){
-                        Toast t = Toast.makeText(getApplicationContext(),
-                                "Username cannot be blank",
-                                Toast.LENGTH_LONG);
-                        t.show();
-                        reset();
-
-                    }else if (password.equals("")){
-                        Toast t = Toast.makeText(getApplicationContext(),
-                                "Password cannot be blank",
-                                Toast.LENGTH_LONG);
-                        t.show();
-                        reset();
-
-                    }else{
-
                         //set up a progress dialog
                         final ProgressDialog dialog = new ProgressDialog(CreateAccount.this);
                         dialog.setMessage("Sign up in progress...");
@@ -86,6 +69,7 @@ public class CreateAccount extends AppCompatActivity {
                                     intent.putExtra(MainActivity.USERNAME, username);
                                     intent.putExtra(MainActivity.PASSWORD, password);
                                     startActivity(intent);
+                                    finish();
 
                                 /*
                                 Intent data = new Intent();
@@ -98,10 +82,6 @@ public class CreateAccount extends AppCompatActivity {
                                 }
                             }
                         });
-                    }
-
-
-
                 }else{
                     String message = "Passwords entered do not match.";
                     Toast t = Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG);

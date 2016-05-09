@@ -64,6 +64,7 @@ public class SignIn extends AppCompatActivity {
                            // setResult(RESULT_OK, data);
                            // finish();
                             startActivity(data);
+                            finish();
                         }
                     }
                 });
@@ -77,6 +78,7 @@ public class SignIn extends AppCompatActivity {
 
                 Intent intent = new Intent(SignIn.this,CreateAccount.class);
                 startActivity(intent);
+                finish();
               //  startActivityForResult(intent, MainActivity.REQUEST_CREATE_ACCOUNT);
 
             }
