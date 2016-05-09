@@ -14,9 +14,11 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -24,10 +26,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -36,8 +41,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.w3c.dom.Text;
 //import course.labs.todomanager.ToDoItem.Priority;
 //import course.labs.todomanager.ToDoItem.Status;
 
@@ -61,8 +69,18 @@ public class AddNewChore extends AppCompatActivity {
     private RadioButton mDefaultPriorityButton;
     private static Button timePickerButton;
     private static Button datePickerButton;
+    private static Button assignTo;
 
-    RadioGroup roomates_radio;
+    private static TextView user;
+
+
+
+
+
+
+
+
+ //   RadioGroup roomates_radio;
 
     // IDs for menu items
     private static final int MENU_DELETE = Menu.FIRST;
@@ -73,12 +91,14 @@ public class AddNewChore extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_todo);
 
+
+
         mTitleText = (EditText) findViewById(R.id.title);
         mDefaultPriorityButton = (RadioButton) findViewById(R.id.medPriority);
         mPriorityRadioGroup = (RadioGroup) findViewById(R.id.priorityGroup);
         chores_spinner = (Spinner) findViewById(R.id.chores_spinner);
-        //roommate_spinner = (Spinner) findViewById(R.id.roommate_spinner);
-        roomates_radio = (RadioGroup) findViewById(R.id.roomates_radio);
+      //  roommate_spinner = (Spinner)findViewById(R.id.roommate_spinner);
+      //  roomates_radio = (RadioGroup) findViewById(R.id.roomates_radio);
 
         datePickerButton = (Button) findViewById(R.id.date_picker_button);
         datePickerButton.setOnClickListener(new OnClickListener() {
@@ -98,15 +118,27 @@ public class AddNewChore extends AppCompatActivity {
             }
         });
 
+        user = (TextView) findViewById(R.id.user);
+
+        assignTo = (Button)findViewById(R.id.assignTo);
+        assignTo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AssignToFragment fragment = new AssignToFragment();
+                fragment.show(getFragmentManager(),"assignTo");
+
+            }
+        });
+
 
         final ArrayAdapter<CharSequence> chores_adapter = ArrayAdapter.createFromResource(this,
                 R.array.chores_array, android.R.layout.simple_spinner_item);
         chores_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         chores_spinner.setAdapter(chores_adapter);
 
-        final String apartment_code = (String) ParseUser.getCurrentUser().get("apartment");
-        final ArrayList<String> roommate_names = new ArrayList<String>();
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
+
+
+     /*   ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, com.parse.ParseException e) {
@@ -121,7 +153,7 @@ public class AddNewChore extends AppCompatActivity {
                             rdbtn.setId(i);
                             i += 1;
                             rdbtn.setText(user.getUsername().toString());
-                            roomates_radio.addView(rdbtn);
+                         //   roomates_radio.addView(rdbtn);
                             //} else {
                             //roommate_names.add(user.getUsername());
                             //}
@@ -130,32 +162,32 @@ public class AddNewChore extends AppCompatActivity {
                     }
                 }
             }
-        });
-
+        });*/
         //String [] str = (String) roommate_names.toArray();
         //String[] mStringArray = new String[roommate_names.size()];
         //mStringArray = roommate_names.toArray(mStringArray);
-
-        /*final ArrayAdapter<String> roommate_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,roommate_names);
+/*
+        final ArrayAdapter<String> roommate_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,roommates);
         roommate_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         roommate_spinner.setAdapter(roommate_adapter);
-
-
-        roommate_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+*/
+/*
+        roommate_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //roommate_adapter.notifyDataSetChanged();
+                Log.d(TAG,"Selected");
+                adapter.notifyDataSetChanged();
                 //person = (roommate_names.get(position));
                 //Log.i("spinner listener ","person is "+roommate_names.get(position));
-                Toast.makeText(getApplicationContext(),"Spinner listener person is "+roommate_adapter.getItem(position).toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Spinner listener person is "+adapter.getItem(position).toString(),Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });*/
+        });
 
-
+*/
 
         // OnClickListener for the Cancel Button,
 
@@ -191,9 +223,12 @@ public class AddNewChore extends AppCompatActivity {
                 Chore.Priority priority = getPriority();
                 Chore.Status status = Chore.Status.NOTDONE;
 
-                String person = getRoommate(roommate_names);
+                //String person = getRoommate(roommate_names);
+                String person = user.getText().toString();
 
-                if(person != null) {
+
+
+                if(person != null && !person.equals("")) {
                     Log.i("person is ", person);
                     String titleString = getToDoTitle();
 
@@ -209,14 +244,15 @@ public class AddNewChore extends AppCompatActivity {
                     newChore.setPerson(person);
                     newChore.saveInBackground();
 
-                    Intent data = new Intent();
+                 /*   Intent data = new Intent();
                     Chore.packageIntent(data, titleString, priority, status,
                             fullDate, person);
 
-                    setResult(RESULT_OK, data);
+                    setResult(RESULT_OK, data);*/
                     finish();
 
                 }else{
+                    Log.d(TAG,"no person");
                     Toast t = Toast.makeText(getApplicationContext(),
                             "Please choose which roommate you want to assign the chore to",
                             Toast.LENGTH_LONG);
@@ -245,6 +281,7 @@ public class AddNewChore extends AppCompatActivity {
 
         timeView.setText(timeString);
     }*/
+
 
     private static void setDateString(int year, int monthOfYear, int dayOfMonth) {
 
@@ -287,18 +324,18 @@ public class AddNewChore extends AppCompatActivity {
         }
     }
 
-    private String getRoommate(ArrayList<String> roommates){
-        int id = roomates_radio.getCheckedRadioButtonId();
-
-        if(id != -1) {
-            Log.i("id checked is", "" + id);
-            return roommates.get(id - 1);
-        }else{
-            return null;
-        }
-
-
-    }
+//    private String getRoommate(ArrayList<String> roommates){
+//        int id = roomates_radio.getCheckedRadioButtonId();
+//
+//        if(id != -1) {
+//            Log.i("id checked is", "" + id);
+//            return roommates.get(id - 1);
+//        }else{
+//            return null;
+//        }
+//
+//
+//    }
 
     /*private Chore.Status getStatus() {
 
@@ -318,6 +355,38 @@ public class AddNewChore extends AppCompatActivity {
             return mTitleText.getText().toString();
         }
         return spinner_item.toString();
+    }
+
+    public static class AssignToFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            final String apartment_code = ParseUser.getCurrentUser().getString("apartment");
+            final ArrayList<String> roommate_names = new ArrayList<String>();
+            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            query.whereEqualTo("apartment",apartment_code);
+            List<ParseUser> list = new ArrayList<>();
+            try{
+                list = query.find();
+
+            } catch (ParseException e){
+
+            }
+            for(ParseUser user : list){
+                roommate_names.add(user.getUsername().toString());
+            }
+            String[] names = new String[roommate_names.size()];
+            roommate_names.toArray(names);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.assign_to)
+                    .setItems(names, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(TAG,"selected " + roommate_names.get(which));
+                            user.setText(roommate_names.get(which));
+                        }
+                    });
+            return builder.create();
+        }
     }
 
 

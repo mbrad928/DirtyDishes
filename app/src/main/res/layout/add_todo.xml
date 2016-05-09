@@ -5,25 +5,22 @@
     android:isScrollContainer="true">
 
     <LinearLayout
+
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true">
 
         <LinearLayout
+            android:id="@+id/ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:paddingTop="30dp">
+            android:paddingTop="30dp"
+            android:weightSum="1">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="Assign Task To:"
-                android:textSize="20dp" />
-
+            <!--
             <RadioGroup
                 android:id="@+id/roomates_radio"
                 android:layout_width="match_parent"
@@ -35,11 +32,31 @@
 
             </RadioGroup>
 
-
+-->
         </LinearLayout>
 
 
         <!-- Title -->
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Assign to"
+            android:id="@+id/assignTo"
+            android:layout_marginLeft="50dp" />
+
+    <TextView
+        android:layout_width="111dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/user"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        />
+</LinearLayout>
 
         <TextView
             android:id="@+id/TitleLabel"
@@ -68,7 +85,9 @@
             android:layout_marginTop="14dp"
             android:ems="10"
             android:hint="Enter Title"
-            android:inputType="textShortMessage">
+            android:inputType="textShortMessage"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <requestFocus />
         </EditText>
@@ -103,7 +122,8 @@
             android:layout_below="@id/title"
             android:layout_marginTop="25dp"
             android:text="Prioirity"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_marginLeft="10dp" />
 
         <RadioGroup
             android:id="@+id/priorityGroup"
@@ -119,7 +139,8 @@
                 android:id="@+id/lowPriority"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Low" />
+                android:text="Low"
+                android:layout_marginLeft="10dp" />
 
             <RadioButton
                 android:id="@+id/medPriority"
@@ -148,7 +169,8 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="Submit" />
+                android:text="Submit"
+                android:layout_marginLeft="10dp" />
 
             <Button
                 android:id="@+id/cancelButton"

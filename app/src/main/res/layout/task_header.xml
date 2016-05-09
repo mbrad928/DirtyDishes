@@ -7,11 +7,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/title"
-        android:textStyle="bold"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginBottom="20dp"
-        android:textSize="40dp"
-        android:textColor="#000"/>
+        android:textSize="30dp"
+        android:textColor="#000"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

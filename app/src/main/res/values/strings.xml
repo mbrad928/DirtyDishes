@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">RoomMe</string>
     <string name="action_settings">Settings</string>
+    <string name="assign_to">Assign to:</string>
     <string-array name="chores_array">
         <item>-Please Select-</item>
         <item>Do the Dishes</item>

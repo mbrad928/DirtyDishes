@@ -10,42 +10,46 @@
         android:text="Change your nickname"
         android:textSize="25dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
 
     <TextView
         android:id="@+id/currNicknameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Current nickname:"
+        android:text="Currently:"
         android:textSize="25dp"
-        android:layout_marginTop="91dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="71dp"
+        android:layout_below="@+id/nicknameTitle"
+        android:layout_alignStart="@+id/newNicknameLabel" />
 
     <TextView
         android:id="@+id/currNicknameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:layout_below="@+id/currNicknameLabel"
-        android:layout_toEndOf="@+id/newNicknameLabel" />
+        android:text="current"
+        android:textSize="25dp"
+        android:layout_alignTop="@+id/currNicknameLabel"
+        android:layout_alignEnd="@+id/nicknameTitle" />
 
     <TextView
         android:id="@+id/newNicknameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New nickname:"
+        android:text="New:"
         android:textSize="25dp"
-        android:layout_below="@+id/currNicknameText"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="36dp" />
+        android:layout_marginTop="41dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/currNicknameLabel"
+        android:layout_alignStart="@+id/nicknameTitle" />
 
     <EditText
         android:id="@+id/newNicknameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/newNicknameLabel"
-        android:layout_toEndOf="@+id/newNicknameLabel"/>
+        android:minWidth="120dp"
+        android:layout_alignTop="@+id/newNicknameLabel"
+        android:layout_alignStart="@+id/cancelButton" />
 
 
     <Button
@@ -54,16 +58,16 @@
         android:layout_height="wrap_content"
         android:text="Submit"
         android:layout_alignTop="@+id/cancelButton"
-        android:layout_toStartOf="@+id/cancelButton" />
+        android:layout_alignEnd="@+id/currNicknameLabel" />
 
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cancel"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="67dp"
         android:layout_below="@+id/newNicknameText"
-        android:layout_toEndOf="@+id/newNicknameText" />
+        android:layout_alignEnd="@+id/currNicknameText" />
 
 
 </RelativeLayout>

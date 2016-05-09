@@ -8,10 +8,15 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -30,12 +35,41 @@ public class Settings extends AppCompatActivity {
 
     ArrayAdapter<String> mAdapter;
     ListView listView;
+    private ListView mDrawerList;
+    private ArrayAdapter<String> drawerAdapter;
+    private static final int MENU_LOGOUT = Menu.FIRST;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.settings);
+
+        mDrawerList = (ListView) findViewById(R.id.nav_list);
+
+        String[] drawerArray = {"View Your Chores",
+                "View All Chores",
+                "Expenses",
+                "Add People",
+                "Settings"
+        };
+        drawerAdapter =
+                new ArrayAdapter<String>(this,R.layout.drawer_item,drawerArray);
+        mDrawerList.setAdapter(drawerAdapter);
+
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header_news = (ViewGroup)inflater.inflate(R.layout.drawer_header, mDrawerList, false);
+        TextView name = (TextView) header_news.findViewById(R.id.username);
+        name.setText(ParseUser.getCurrentUser().getUsername());
+        mDrawerList.addHeaderView(header_news, null, false);
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                drawerItemSelected(position);
+
+            }
+        });
 
         listView = (ListView) findViewById(R.id.listView);
 
@@ -54,6 +88,34 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+    }
+
+    public boolean drawerItemSelected(int position) {
+        if(position == 1){//View Your Chores
+            Log.d(TAG, "'View Your Chores' selected");
+            Intent i = new Intent(Settings.this,MainActivity.class);
+            startActivity(i);
+        } else if (position == 2){//View all Chores
+            Log.d(TAG, "'View all Chores' selected");
+            Intent i = new Intent(Settings.this,MainActivity.class);
+            i.putExtra("all",1);
+            startActivity(i);
+        } else if (position == 3) {// Expenses
+            Log.d(TAG, "'Expenses' selected");
+            Intent i = new Intent(Settings.this,Expenses.class);
+            startActivity(i);
+        } else if (position == 4) {//Add people
+            Log.d(TAG, "'Add people' selected");
+            Intent i = new Intent(Settings.this,AddApartment.class);
+            startActivity(i);
+
+
+        }else if(position == 5) { //Settings
+            Log.d(TAG,"'Settings' selected");
+            Intent intent = new Intent(Settings.this, Settings.class);
+            startActivity(intent);
+        }
+        return true;
     }
 
     public boolean itemSelected(int position) {
@@ -145,6 +207,37 @@ public class Settings extends AppCompatActivity {
 
             // Create the AlertDialog object and return it
             return builder.create();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        menu.add(Menu.NONE, MENU_LOGOUT, Menu.NONE, "Logout");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_LOGOUT:
+                ParseUser.logOut();
+                Intent intent = new Intent(Settings.this,SignIn.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

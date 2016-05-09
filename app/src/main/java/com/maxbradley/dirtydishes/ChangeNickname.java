@@ -35,7 +35,7 @@ public class ChangeNickname extends Activity {
         String nickname = (String) user.get("nickname");
 
         if(null == nickname || nickname.equals("")){
-            currNicknameText.setText("<no current nickname>");
+            currNicknameText.setText("<Not Set>");
         }else{
             currNicknameText.setText(nickname);
         }
