@@ -73,7 +73,8 @@ public class AddNewChore extends AppCompatActivity {
 
     private static TextView user;
 
-    private String assignedUser;
+
+
 
 
 
@@ -89,6 +90,7 @@ public class AddNewChore extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_todo);
+
 
 
         mTitleText = (EditText) findViewById(R.id.title);
@@ -225,7 +227,8 @@ public class AddNewChore extends AppCompatActivity {
                 String person = user.getText().toString();
 
 
-                if(person != null || person.equals("")) {
+
+                if(person != null && !person.equals("")) {
                     Log.i("person is ", person);
                     String titleString = getToDoTitle();
 
