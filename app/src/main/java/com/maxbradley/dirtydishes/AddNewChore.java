@@ -47,7 +47,10 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 //import course.labs.todomanager.ToDoItem.Priority;
 //import course.labs.todomanager.ToDoItem.Status;
 
@@ -101,7 +104,26 @@ public class AddNewChore extends AppCompatActivity {
         mDefaultPriorityButton = (RadioButton) findViewById(R.id.medPriority);
         mPriorityRadioGroup = (RadioGroup) findViewById(R.id.priorityGroup);
         chores_spinner = (Spinner) findViewById(R.id.chores_spinner);
-      //  roommate_spinner = (Spinner)findViewById(R.id.roommate_spinner);
+
+
+        chores_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position != 0) {
+                    mTitleText.setText(chores_spinner.getSelectedItem().toString());
+                }else{
+                    mTitleText.setText("");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
+        //  roommate_spinner = (Spinner)findViewById(R.id.roommate_spinner);
       //  roomates_radio = (RadioGroup) findViewById(R.id.roomates_radio);
 
         datePickerButton = (Button) findViewById(R.id.date_picker_button);
@@ -236,29 +258,41 @@ public class AddNewChore extends AppCompatActivity {
 
 
                 if(person != null && !person.equals("name")) {
+
                     Log.i("person is ", person);
-                    String titleString = getToDoTitle();
 
+                    //String titleString = getToDoTitle();
+                    String titleString = mTitleText.getText().toString();
 
-                    String fullDate = Chore.FORMAT.format(mCalendar.getTime());
-                    ChoreItem newChore = new ChoreItem();
-                    newChore.setUser(ParseUser.getCurrentUser());
-                    newChore.setApartment(ParseUser.getCurrentUser().getString("apartment"));
-                    newChore.setTitle(titleString);
-                    newChore.setPriority(priority.ordinal());
-                    newChore.setStatus(status.ordinal());
-                    newChore.setDate(fullDate);
-                    newChore.setPerson(person);
-                    newChore.saveInBackground();
-                    mID = (int)(System.currentTimeMillis()/1000);
-                    newChore.setID(mID);
+                    if (titleString.equals("")){
+                        Toast t = Toast.makeText(getApplicationContext(),
+                                "Please give your chore a title",
+                                Toast.LENGTH_LONG);
+                        t.show();
+                   
 
-                    Intent data = new Intent();
-                    Chore.packageIntent(data, titleString, priority, status,
-                            fullDate, person, mID);
+                    }else {
+                        String fullDate = Chore.FORMAT.format(mCalendar.getTime());
+                        ChoreItem newChore = new ChoreItem();
+                        newChore.setUser(ParseUser.getCurrentUser());
+                        newChore.setApartment(ParseUser.getCurrentUser().getString("apartment"));
+                        newChore.setTitle(titleString);
+                        newChore.setPriority(priority.ordinal());
+                        newChore.setStatus(status.ordinal());
+                        newChore.setDate(fullDate);
+                        newChore.setPerson(person);
+                        newChore.saveInBackground();
+                        mID = (int)(System.currentTimeMillis()/1000);
+                        newChore.setID(mID);
+                        Intent data = new Intent();
+                        Chore.packageIntent(data, titleString, priority, status,
+                                fullDate, person, mID);
+                        setResult(RESULT_OK, data);
+                        finish();
+                    }
+                    
 
-                    setResult(RESULT_OK, data);
-                    finish();
+                   
 
                 }else{
                     Log.d(TAG,"no person");
@@ -355,13 +389,17 @@ public class AddNewChore extends AppCompatActivity {
         }
     }*/
 
+    /*
+     *  Function no longer used - get title directly from TextView which
+     *  is automatically populated when user hits a spinner item
+     *
     private String getToDoTitle() {
         String spinner_item = chores_spinner.getSelectedItem().toString();
         if(spinner_item.equals("-Please Select-")){
             return mTitleText.getText().toString();
         }
         return spinner_item.toString();
-    }
+    }*/
 
     public static class AssignToFragment extends DialogFragment {
         @Override

@@ -130,6 +130,11 @@ public class List_Adapter extends ArrayAdapter<Chore> {
                                             chore.delete();
                                             chore.saveInBackground();
 
+                                            Toast t = Toast.makeText(getContext(),
+                                                    "Chore completed!",
+                                                    Toast.LENGTH_LONG);
+                                            t.show();
+
 
                                         } catch (ParseException e1) {
                                             e1.printStackTrace();
