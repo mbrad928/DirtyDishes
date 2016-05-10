@@ -122,8 +122,7 @@ public class AddApartment extends AppCompatActivity {
                 }
 
                 // Have permission, can now send SMS
-                sendSMS(phone.getText().toString(), "hey " + name.getText().toString() + "! You've been added to a room on " +
-                        "RoomMe! Download RoomMe, create an account, and enter code: " + apartment_code + " to join!"); //send code here
+                sendSMS(phone.getText().toString(), apartment_code); //send code here
                 Log.d("SendSMS","Sent SMS");
                 mAdapter.add(name.getText().toString());
                 name.setText("");
