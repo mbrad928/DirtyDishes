@@ -158,7 +158,7 @@ public class Settings extends AppCompatActivity {
 
                             // Remove user's tasks from apartment task list
                             ParseQuery<ChoreItem> query = ChoreItem.getQuery();
-                            query.whereEqualTo("user", ParseUser.getCurrentUser());
+                            query.whereEqualTo("person", ParseUser.getCurrentUser().getUsername());
 
                             query.findInBackground(new FindCallback<ChoreItem>() {
                                 @Override

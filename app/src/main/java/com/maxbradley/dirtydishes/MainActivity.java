@@ -87,8 +87,27 @@ public class MainActivity extends AppCompatActivity
 
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup header_news = (ViewGroup)inflater.inflate(R.layout.drawer_header, mDrawerList, false);
-        TextView name = (TextView) header_news.findViewById(R.id.username);
-        name.setText(ParseUser.getCurrentUser().getUsername());
+        final TextView name = (TextView) header_news.findViewById(R.id.username);
+
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("username",ParseUser.getCurrentUser().getUsername());
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, com.parse.ParseException e) {
+                if (e == null) {
+
+                    for (ParseUser user : objects) {
+                        if (user.get("nickname")==null) {
+                            name.setText(ParseUser.getCurrentUser().getUsername());
+                        }else{
+                            name.setText((String)user.get("nickname"));
+                        }
+
+                    }
+                }
+            }
+        });
+        //name.setText(ParseUser.getCurrentUser().getUsername());
         mDrawerList.addHeaderView(header_news, null, false);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -216,11 +235,14 @@ public class MainActivity extends AppCompatActivity
         if(position == 1){//View Your Chores
             Log.d(TAG, "'View Your Chores' selected");
             Intent i = new Intent(MainActivity.this,MainActivity.class);
+            mAdapter.clear();
             startActivity(i);
+
         } else if (position == 2){//View all Chores
             Log.d(TAG, "'View all Chores' selected");
             Intent i = new Intent(MainActivity.this,MainActivity.class);
             i.putExtra("all",1);
+            mAdapter.clear();
             startActivity(i);
         } else if (position == 3) {// Expenses
             Log.d(TAG, "'Expenses' selected");

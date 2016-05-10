@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -94,8 +95,27 @@ public class List_Adapter extends BaseAdapter {
         String title = toDoItem.getTitle();
         titleView.setText(title);
 
-        TextView person = (TextView) itemLayout.findViewById(R.id.person_task_name);
+        final TextView person = (TextView) itemLayout.findViewById(R.id.person_task_name);
         //Log.i("Person is", toDoItem.getPerson());
+        ParseQuery<ParseUser> query = ParseUser.getQuery(); //sets the chore person to the nickname in the UI
+        query.whereEqualTo("username",toDoItem.getPerson());
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, com.parse.ParseException e) {
+                if (e == null) {
+
+                    for (ParseUser user : objects) {
+                        if (user.get("nickname")==null) {
+                            person.setText(toDoItem.getPerson());
+                        }else{
+                            person.setText((String)user.get("nickname"));
+                        }
+
+                    }
+                }
+            }
+        });
+
         person.setText(toDoItem.getPerson());
 
 
