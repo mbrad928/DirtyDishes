@@ -157,13 +157,6 @@ public class MainActivity extends AppCompatActivity
         //   });
 
 
-        mAdapter.sort(new Comparator<Chore>() {
-            @Override
-            public int compare(Chore one, Chore two) {
-
-                return one.getDate().compareTo(two.getDate());
-            }
-        });
         listView.setAdapter(mAdapter);
 
 
@@ -180,7 +173,6 @@ public class MainActivity extends AppCompatActivity
 
         listView.addHeaderView(header, null, false);
         listView.setHeaderDividersEnabled(true);
-
 
     }
 

@@ -2,7 +2,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:isScrollContainer="true">
+    android:isScrollContainer="true"
+    android:id="@+id/scrollView"
+    android:focusableInTouchMode="true"
+    android:background="#ffffff">
 
     <LinearLayout
 
@@ -11,6 +14,17 @@
         android:orientation="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Add Chore"
+            android:id="@+id/textView2"
+            android:layout_gravity="center_horizontal"
+            android:textSize="30dp"
+            android:textColor="#000"
+            android:layout_marginTop="10dp" />
 
         <LinearLayout
             android:id="@+id/ll"
@@ -38,7 +52,8 @@
 
 
         <!-- Title -->
-<LinearLayout
+
+        <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
@@ -57,7 +72,9 @@
         android:id="@+id/user"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-        />
+        android:textSize="20dp"
+        android:text="Name"
+        android:textColor="#000000" />
 </LinearLayout>
 
         <TextView
@@ -76,7 +93,7 @@
             android:layout_height="wrap_content"
 
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="30dp"></Spinner>
+            android:layout_marginTop="10dp"></Spinner>
 
         <EditText
             android:id="@+id/title"
@@ -84,14 +101,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/chores_spinner"
-            android:layout_marginTop="14dp"
             android:ems="10"
             android:hint="Enter Title"
             android:inputType="textShortMessage"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp">
-
-            <requestFocus />
         </EditText>
 
 
@@ -101,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="40dp"
             android:text="Choose Date" />
 
         <Button
@@ -122,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/title"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="40dp"
             android:text="Prioirity"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_marginLeft="10dp" />
@@ -135,7 +149,8 @@
             android:layout_below="@id/priority"
             android:layout_marginTop="12dp"
             android:orientation="horizontal"
-            android:text="Prioirity">
+            android:text="Prioirity"
+            android:gravity="center">
 
             <RadioButton
                 android:id="@+id/lowPriority"
@@ -163,7 +178,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="40dp"
             android:orientation="horizontal">
 
             <Button
@@ -171,8 +186,7 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="Submit"
-                android:layout_marginLeft="10dp" />
+                android:text="Submit" />
 
             <Button
                 android:id="@+id/cancelButton"

@@ -93,7 +93,6 @@ public class AddNewChore extends AppCompatActivity {
         setContentView(R.layout.add_todo);
 
 
-
         mTitleText = (EditText) findViewById(R.id.title);
         mDefaultPriorityButton = (RadioButton) findViewById(R.id.medPriority);
         mPriorityRadioGroup = (RadioGroup) findViewById(R.id.priorityGroup);
@@ -122,6 +121,7 @@ public class AddNewChore extends AppCompatActivity {
         user = (TextView) findViewById(R.id.user);
 
         assignTo = (Button)findViewById(R.id.assignTo);
+        assignTo.requestFocus();
         assignTo.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,6 +138,8 @@ public class AddNewChore extends AppCompatActivity {
         chores_spinner.setAdapter(chores_adapter);
 
         mCalendar = Calendar.getInstance();
+
+        findViewById(R.id.scrollView).requestFocus();
 
      /*   ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.findInBackground(new FindCallback<ParseUser>() {
