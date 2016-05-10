@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity
 
     ArrayList<Chore> chores;
 
+    private int all;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +142,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddNewChore.class);
+                //Log.i("intent to addnewchore",intent.getIntExtra("all",0)+"");
+                //chores.clear();
+
                 startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
             }
         });
@@ -164,7 +169,7 @@ public class MainActivity extends AppCompatActivity
         ViewGroup header = (ViewGroup)inflater.inflate(R.layout.task_header, mDrawerList, false);
         TextView title = (TextView) header.findViewById(R.id.title);
         Intent i = getIntent();
-        int all = i.getIntExtra("all",0);
+        all = i.getIntExtra("all",0);
         if(all == 1){
             title.setText("All Chores");
         }else{
@@ -184,12 +189,19 @@ public class MainActivity extends AppCompatActivity
 
             if (requestCode == ADD_TODO_ITEM_REQUEST) {
                 Chore item = new Chore(data);
-                //if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
-                    //chores.add(item); Log.i("LOG", "OnactivityResult add Item");
-                //}else{
+                //Intent i = getIntent();
+                //int all = i.getIntExtra("all",0);
+                Log.i("On Activity result all",all+"");
+                if(all == 1){
+                    chores.add(item);
+                }else{
+                if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
+                    chores.add(item);
+                }
+                }//else{
                   //  mAdapter.clear();
-                    Log.i("LOG","OnactivityResult load Items");
-                    loadItems();
+                    //Log.i("LOG","OnactivityResult load Items");
+                   // loadItems();
                 //}
                     Collections.sort(chores, new Comparator<Chore>() {
                         @Override
@@ -259,7 +271,7 @@ public class MainActivity extends AppCompatActivity
         } else if (position == 2){//View all Chores
             Log.d(TAG, "'View all Chores' selected");
             Intent i = new Intent(MainActivity.this,MainActivity.class);
-            i.putExtra("all",1);
+            i.putExtra("all", 1);
             //mAdapter.clear();
             startActivity(i);
         } else if (position == 3) {// Expenses
@@ -355,11 +367,11 @@ public class MainActivity extends AppCompatActivity
     private void loadItems() {
         //load from Parse
         Log.i("in loadItems", "inloadItems");
-        //chores.clear();
+        chores.clear();
         //mAdapter.clear();
         //mAdapter.notifyDataSetChanged();
-        Intent i = getIntent();
-        int all = i.getIntExtra("all",0);
+        //Intent i = getIntent();
+        //all = i.getIntExtra("all",0);
         if(all == 1){ //want tasks for full apartment
             ParseQuery<ChoreItem> query = ChoreItem.getQuery();
             query.whereEqualTo("apartment",ParseUser.getCurrentUser().getString("apartment"));
