@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +29,8 @@ public class CodeActivity extends AppCompatActivity {
     private Button generateButton;
     private String code;
 
+    private static final int MENU_LOGOUT = Menu.FIRST;
+
     private String username;
     private String password;
 
@@ -42,7 +46,7 @@ public class CodeActivity extends AppCompatActivity {
 
         username = incomingIntent.getStringExtra(MainActivity.USERNAME);
         password = incomingIntent.getStringExtra(MainActivity.PASSWORD);
-        Log.d(TAG,username);
+        Log.d(TAG, username);
         if (password != null) {
             Log.d(TAG, password);
         }
@@ -50,7 +54,6 @@ public class CodeActivity extends AppCompatActivity {
         codeEnter = (EditText) findViewById(R.id.codeEnter);
         joinButton = (Button) findViewById(R.id.joinButton);
         generateButton = (Button) findViewById(R.id.generateCodeButton);
-
 
 
         joinButton.setOnClickListener(new View.OnClickListener() {
@@ -73,11 +76,11 @@ public class CodeActivity extends AppCompatActivity {
                 query.findInBackground(new FindCallback<Apartment>() {
                     @Override
                     public void done(List<Apartment> objects, com.parse.ParseException e) {
-                        if(e == null) {
+                        if (e == null) {
                             boolean found = false;
-                            for (Apartment a : objects){
-                                if (a.getApartmentCode().equals(enteredCode)){
-                                    Log.i("Found apartment match",a.getApartmentCode());
+                            for (Apartment a : objects) {
+                                if (a.getApartmentCode().equals(enteredCode)) {
+                                    Log.i("Found apartment match", a.getApartmentCode());
                                     //change apartment string to a.getApartmentCode()
                                     ParseUser.getCurrentUser().put("apartment", a.getApartmentCode());
                                     ParseUser.getCurrentUser().saveInBackground();
@@ -87,8 +90,8 @@ public class CodeActivity extends AppCompatActivity {
                                     startActivity(data);
                                 }
                             }
-                            if(!found){
-                                Toast.makeText(getApplicationContext(),"Room not found", Toast.LENGTH_LONG).show();
+                            if (!found) {
+                                Toast.makeText(getApplicationContext(), "Room not found", Toast.LENGTH_LONG).show();
                             }
                         }
                     }
@@ -96,7 +99,6 @@ public class CodeActivity extends AppCompatActivity {
 
             }
         });
-
 
 
         generateButton.setOnClickListener(new View.OnClickListener() {
@@ -188,6 +190,28 @@ public class CodeActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        menu.add(Menu.NONE, MENU_LOGOUT, Menu.NONE, "Logout");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_LOGOUT:
+                ParseUser.logOut();
+                Intent intent = new Intent(CodeActivity.this, SignIn.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }
