@@ -103,22 +103,9 @@ public class List_Adapter extends BaseAdapter {
         //statusView.setChecked(toDoItem.getStatus().equals(Chore.Status.DONE));
         TextView overdue = (TextView) itemLayout.findViewById(R.id.overdue);
 
-        Calendar calendar = Calendar.getInstance();
-        int thisMonth = calendar.get(Calendar.MONTH) + 1; //starts at 0
-        int thisDay = calendar.get(Calendar.DAY_OF_MONTH);
-        SimpleDateFormat simpleDate =  new SimpleDateFormat("MM-dd");
 
-
-        String chore_date = simpleDate.format(toDoItem.getDate());
-        String[] date = chore_date.split("-");
-        int month = Integer.parseInt(date[0]);
-        int day = Integer.parseInt(date[1]);
-        if(month > thisMonth){
+        if(Calendar.getInstance().getTime().before(toDoItem.getDate())) {
             overdue.setVisibility(View.INVISIBLE);
-        }else if(month == thisMonth){
-            if(day > thisDay){
-                overdue.setVisibility(View.INVISIBLE);
-            }
         }
 
         if(!toDoItem.getPerson().equals(ParseUser.getCurrentUser().getUsername())){
@@ -168,10 +155,8 @@ public class List_Adapter extends BaseAdapter {
         priorityView.setText(toDoItem.getPriority().toString());
         //change prioirity text color
 
-
-        String string = Chore.FORMAT.format(toDoItem.getDate());
         final TextView dateView = (TextView)itemLayout.findViewById(R.id.dateView);
-        dateView.setText(string);
+        dateView.setText(Chore.DISPLAY_FORMAT_DATE_TIME.format(toDoItem.getDate()));
 
         return itemLayout;
 

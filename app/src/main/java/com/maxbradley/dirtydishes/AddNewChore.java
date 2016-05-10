@@ -62,6 +62,7 @@ public class AddNewChore extends AppCompatActivity {
     private Spinner roommate_spinner;
 
     private Date mDate;
+    private static Calendar mCalendar;
     private RadioGroup mPriorityRadioGroup;
     private RadioGroup mStatusRadioGroup;
     private EditText mTitleText;
@@ -125,7 +126,7 @@ public class AddNewChore extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AssignToFragment fragment = new AssignToFragment();
-                fragment.show(getFragmentManager(),"assignTo");
+                fragment.show(getFragmentManager(), "assignTo");
 
             }
         });
@@ -136,7 +137,7 @@ public class AddNewChore extends AppCompatActivity {
         chores_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         chores_spinner.setAdapter(chores_adapter);
 
-
+        mCalendar = Calendar.getInstance();
 
      /*   ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.findInBackground(new FindCallback<ParseUser>() {
@@ -233,7 +234,7 @@ public class AddNewChore extends AppCompatActivity {
                     String titleString = getToDoTitle();
 
 
-                    String fullDate = dateString + " " + timeString;
+                    String fullDate = Chore.FORMAT.format(mCalendar.getTime());
                     ChoreItem newChore = new ChoreItem();
                     newChore.setUser(ParseUser.getCurrentUser());
                     newChore.setApartment(ParseUser.getCurrentUser().getString("apartment"));
@@ -285,28 +286,23 @@ public class AddNewChore extends AppCompatActivity {
 
     private static void setDateString(int year, int monthOfYear, int dayOfMonth) {
 
-        monthOfYear++;
-        String mon = "" + monthOfYear;
-        String day = "" + dayOfMonth;
+        mCalendar.set(Calendar.YEAR, year);
+        mCalendar.set(Calendar.MONTH, monthOfYear);
+        mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        if (monthOfYear < 10)
-            mon = "0" + monthOfYear;
-        if (dayOfMonth < 10)
-            day = "0" + dayOfMonth;
+        Date date = mCalendar.getTime();
 
-        dateString = year + "-" + mon + "-" + day;
+        dateString = Chore.DISPLAY_FORMAT_DATE.format(date);
     }
 
     private static void setTimeString(int hourOfDay, int minute, int mili) {
-        String hour = "" + hourOfDay;
-        String min = "" + minute;
 
-        if (hourOfDay < 10)
-            hour = "0" + hourOfDay;
-        if (minute < 10)
-            min = "0" + minute;
+        mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        mCalendar.set(Calendar.MINUTE, minute);
 
-        timeString = hour + ":" + min + ":00";
+        Date time = mCalendar.getTime();
+
+        timeString = Chore.DISPLAY_FORMAT_TIME.format(time);
     }
 
     private Chore.Priority getPriority() {
@@ -426,7 +422,7 @@ public class AddNewChore extends AppCompatActivity {
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
 
-            return new TimePickerDialog(getActivity(), this, hour, minute, true);
+            return new TimePickerDialog(getActivity(), this, hour, minute, false);
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
