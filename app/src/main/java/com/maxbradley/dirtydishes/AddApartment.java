@@ -126,7 +126,7 @@ public class AddApartment extends AppCompatActivity {
                             Toast.LENGTH_LONG);
                     t.show();
 
-                }else {
+                }else{
 
                     // Requesting permission to send SMS
                     int permission = ActivityCompat.checkSelfPermission(AddApartment.this,
