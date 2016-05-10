@@ -1,5 +1,7 @@
 package com.maxbradley.dirtydishes;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +23,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -186,6 +189,7 @@ public class MainActivity extends AppCompatActivity
                 Chore item = new Chore(data);
                 if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
                     chores.add(item);
+                    setNotification(item);
                 }else{
                     loadItems();
                 }
@@ -365,6 +369,7 @@ public class MainActivity extends AppCompatActivity
                             Chore newC = new Chore(chore);
 
                             chores.add(newC);
+                            setNotification(newC);
                             Collections.sort(chores, new Comparator<Chore>() {
                                 @Override
                                 public int compare(Chore one, Chore two) {
@@ -389,6 +394,7 @@ public class MainActivity extends AppCompatActivity
                                 Chore newC = new Chore(chore);
 
                                 chores.add(newC);
+                                setNotification(newC);
                                 Collections.sort(chores, new Comparator<Chore>() {
                                     @Override
                                     public int compare(Chore one, Chore two) {
@@ -468,5 +474,26 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         return false;
+    }
+
+
+
+    private void setNotification(Chore chore) {
+
+        if (ParseUser.getCurrentUser().getUsername().equals(chore.getPerson())){
+            Intent intent = new Intent(this, Notifications.class);
+
+            Chore.packageIntent(intent, chore.getTitle(), chore.getPriority(), Chore.Status.NOTDONE,
+                    Chore.FORMAT.format(chore.getDate()), chore.getPerson(), chore.getID());
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, chore.getID(), intent, PendingIntent.FLAG_ONE_SHOT);
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(chore.getDate());
+            cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) - 1);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+            Log.i(TAG, "Set alarm, id is " + chore.getID());
+        }
     }
 }

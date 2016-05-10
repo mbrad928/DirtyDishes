@@ -46,6 +46,7 @@ public class Chore {
     private Priority mPriority = Priority.LOW;
     private Status mStatus = Status.NOTDONE;
     private Date mDate = new Date();
+    private int mID;
 
     Chore(String title, Priority priority, Status status, Date date, String person) {
         this.mTitle = title;
@@ -53,6 +54,7 @@ public class Chore {
         this.mStatus = status;
         this.mDate = date;
         this.mPerson = person;
+        this.mID = (int) (System.currentTimeMillis()/1000);
     }
 
     Chore(ChoreItem item){
@@ -65,6 +67,7 @@ public class Chore {
         }catch (ParseException e){
             e.printStackTrace();
         }
+        this.mID = item.getID();
     }
 
 
@@ -74,6 +77,7 @@ public class Chore {
         mPriority = Priority.valueOf(intent.getStringExtra(Chore.PRIORITY));
         mStatus = Status.valueOf(intent.getStringExtra(Chore.STATUS));
         mPerson = intent.getStringExtra("Person");
+        mID = intent.getIntExtra("notificationID", 0);
 
         try {
             mDate = Chore.FORMAT.parse(intent.getStringExtra(Chore.DATE));
@@ -112,18 +116,34 @@ public class Chore {
         return mDate;
     }
 
+    public void setID(int id){this.mID = id;}
+
+    public int getID(){return mID;}
+
     public void setDate(Date date) {
         mDate = date;
     }
 
     public static void packageIntent(Intent intent, String title,
-                                     Priority priority, Status status, String date, String person) {
+                                     Priority priority, Status status, String date, String person, int id) {
 
         intent.putExtra(Chore.TITLE, title);
         intent.putExtra(Chore.PRIORITY, priority.toString());
         intent.putExtra(Chore.STATUS, status.toString());
         intent.putExtra(Chore.DATE, date);
         intent.putExtra("Person", person);
+        intent.putExtra("notificationID", id);
+
+    }
+
+    public static void packageIntent(Intent intent, Chore chore) {
+
+        intent.putExtra(Chore.TITLE, chore.getTitle());
+        intent.putExtra(Chore.PRIORITY, chore.getPriority().toString());
+        intent.putExtra(Chore.STATUS, chore.getStatus().toString());
+        intent.putExtra(Chore.DATE, chore.getDate());
+        intent.putExtra("Person", chore.getPerson());
+        intent.putExtra("notificationID", chore.getID());
 
     }
 

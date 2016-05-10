@@ -53,6 +53,10 @@ public class ChoreItem extends ParseObject {
         return getInt("status");
     }
 
+    public int getID(){return getInt("notificationID");}
+
+    public void setID(int id){put("notificationID", id);}
+
     public String getDate(){
         return getString("date");
     }

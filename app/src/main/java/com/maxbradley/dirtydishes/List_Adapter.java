@@ -1,5 +1,6 @@
 package com.maxbradley.dirtydishes;
 
+import android.app.AlarmManager;
 import android.app.ListActivity;
 
 import java.text.SimpleDateFormat;
@@ -9,7 +10,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,6 +107,14 @@ public class List_Adapter extends ArrayAdapter<Chore> {
                     if (toDoItem.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
                         remove(toDoItem);
                         notifyDataSetChanged();
+
+                        // removes the notification
+                        Intent intent = new Intent(getContext(), Notifications.class);
+                        Chore.packageIntent(intent, toDoItem);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), toDoItem.getID(), intent, PendingIntent.FLAG_ONE_SHOT);
+                        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.cancel(pendingIntent);
+                        Log.i(TAG, "attempting delete of notification, id " + toDoItem.getID());
 
                         //remove from db
                         ParseQuery<ChoreItem> query = ChoreItem.getQuery();

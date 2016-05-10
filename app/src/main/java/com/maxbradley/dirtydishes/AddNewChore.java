@@ -10,9 +10,11 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,6 +64,7 @@ public class AddNewChore extends AppCompatActivity {
     private Spinner roommate_spinner;
 
     private Date mDate;
+    private int mID;
     private static Calendar mCalendar;
     private RadioGroup mPriorityRadioGroup;
     private RadioGroup mStatusRadioGroup;
@@ -71,6 +74,7 @@ public class AddNewChore extends AppCompatActivity {
     private static Button timePickerButton;
     private static Button datePickerButton;
     private static Button assignTo;
+
 
     private static TextView user;
 
@@ -246,10 +250,12 @@ public class AddNewChore extends AppCompatActivity {
                     newChore.setDate(fullDate);
                     newChore.setPerson(person);
                     newChore.saveInBackground();
+                    mID = (int)(System.currentTimeMillis()/1000);
+                    newChore.setID(mID);
 
                     Intent data = new Intent();
                     Chore.packageIntent(data, titleString, priority, status,
-                            fullDate, person);
+                            fullDate, person, mID);
 
                     setResult(RESULT_OK, data);
                     finish();
@@ -265,6 +271,8 @@ public class AddNewChore extends AppCompatActivity {
             }
         });
     }
+
+
 
     /*private void setDefaultDateTime() {
 
