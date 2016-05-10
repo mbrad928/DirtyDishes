@@ -1,37 +1,20 @@
 package com.maxbradley.dirtydishes;
 
-import android.app.ListActivity;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -118,6 +101,11 @@ public class List_Adapter extends ArrayAdapter<Chore> {
                                         try {
                                             chore.delete();
                                             chore.saveInBackground();
+
+                                            Toast t = Toast.makeText(getContext(),
+                                                    "Chore completed!",
+                                                    Toast.LENGTH_LONG);
+                                            t.show();
 
 
                                         } catch (ParseException e1) {
