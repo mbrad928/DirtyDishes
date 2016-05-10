@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity
                     for (ParseUser user : objects) {
                         if (user.get("nickname") == null) {
                             name.setText(ParseUser.getCurrentUser().getUsername());
-                        }else{
-                            name.setText((String)user.get("nickname"));
+                        } else {
+                            name.setText((String) user.get("nickname"));
                         }
 
                     }
@@ -184,11 +184,13 @@ public class MainActivity extends AppCompatActivity
 
             if (requestCode == ADD_TODO_ITEM_REQUEST) {
                 Chore item = new Chore(data);
-                if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
-                    chores.add(item);
-                }else{
+                //if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
+                    //chores.add(item); Log.i("LOG", "OnactivityResult add Item");
+                //}else{
+                  //  mAdapter.clear();
+                    Log.i("LOG","OnactivityResult load Items");
                     loadItems();
-                }
+                //}
                     Collections.sort(chores, new Comparator<Chore>() {
                         @Override
                         public int compare(Chore one, Chore two) {
@@ -251,14 +253,14 @@ public class MainActivity extends AppCompatActivity
         if(position == 1){//View Your Chores
             Log.d(TAG, "'View Your Chores' selected");
             Intent i = new Intent(MainActivity.this, MainActivity.class);
-            mAdapter.clear();
+            //mAdapter.clear();
             startActivity(i);
 
         } else if (position == 2){//View all Chores
             Log.d(TAG, "'View all Chores' selected");
             Intent i = new Intent(MainActivity.this,MainActivity.class);
             i.putExtra("all",1);
-            mAdapter.clear();
+            //mAdapter.clear();
             startActivity(i);
         } else if (position == 3) {// Expenses
             Log.d(TAG, "'Expenses' selected");
@@ -281,6 +283,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onResume() {
+        Log.i("inOnResume", " in OnResume");
         super.onResume();
 
         // if current user is null this screws up big
@@ -351,6 +354,10 @@ public class MainActivity extends AppCompatActivity
     // Load stored ToDoItems
     private void loadItems() {
         //load from Parse
+        Log.i("in loadItems", "inloadItems");
+        //chores.clear();
+        //mAdapter.clear();
+        //mAdapter.notifyDataSetChanged();
         Intent i = getIntent();
         int all = i.getIntExtra("all",0);
         if(all == 1){ //want tasks for full apartment
