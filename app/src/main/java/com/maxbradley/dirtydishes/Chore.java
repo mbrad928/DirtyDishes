@@ -25,8 +25,18 @@ public class Chore {
     public final static String DATE = "date";
     public final static String FILENAME = "filename";
 
+    public final static SimpleDateFormat DISPLAY_FORMAT_TIME = new SimpleDateFormat(
+            "h:mm a", Locale.US);
+
+    public final static SimpleDateFormat DISPLAY_FORMAT_DATE = new SimpleDateFormat(
+            "MM/dd", Locale.US);
+
     public final static SimpleDateFormat FORMAT = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss", Locale.US);
+            "HH:mm  MM/dd/yyyy", Locale.US);
+
+    public final static SimpleDateFormat DISPLAY_FORMAT_DATE_TIME = new SimpleDateFormat(
+            "h:mm a    M/dd", Locale.US);
+
 
     private String mTitle = new String();
     private String mPerson = new String();

@@ -1,12 +1,25 @@
 package com.maxbradley.dirtydishes;
 
+import android.app.ListActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -116,41 +129,10 @@ public class List_Adapter extends BaseAdapter {
         Calendar calendar = Calendar.getInstance();
         int thisMonth = calendar.get(Calendar.MONTH) + 1; //starts at 0
         int thisDay = calendar.get(Calendar.DAY_OF_MONTH);
-        int thisYear = calendar.get(Calendar.YEAR);
-        int thisHour = calendar.get(Calendar.HOUR_OF_DAY);
-        int thisMinute = calendar.get(Calendar.MINUTE);
-        //SimpleDateFormat simpleDate =  new SimpleDateFormat("MM-dd-yyyy");
-        SimpleDateFormat simpleDate = Chore.FORMAT;
+        SimpleDateFormat simpleDate =  new SimpleDateFormat("MM-dd");
 
-
-        String chore_date = simpleDate.format(toDoItem.getDate());
-        //String[] date = chore_date.split("-");
-
-        String[] wholeDate = chore_date.split(" ");
-        String[] date = wholeDate[0].split("-");
-
-        String[] sHour = wholeDate[1].split(":");
-
-
-        int month = Integer.parseInt(date[1]); //0
-        int day = Integer.parseInt(date[2]);   //1
-        int year = Integer.parseInt(date[0]);  //2
-
-        int hour = Integer.parseInt(sHour[0]);
-        int minute = Integer.parseInt(sHour[1]);
-
-        if(year > thisYear){
+        if(Calendar.getInstance().getTime().before(toDoItem.getDate())) {
             overdue.setVisibility(View.INVISIBLE);
-        }else if(month > thisMonth){
-            overdue.setVisibility(View.INVISIBLE);
-        }else if(month == thisMonth){
-            if(day > thisDay){
-                overdue.setVisibility(View.INVISIBLE);
-            }else if(hour > thisHour){
-                overdue.setVisibility(View.INVISIBLE);
-            }else if(minute > thisMinute){
-                overdue.setVisibility(View.INVISIBLE);
-            }
         }
 
         if(!toDoItem.getPerson().equals(ParseUser.getCurrentUser().getUsername())){
@@ -200,10 +182,8 @@ public class List_Adapter extends BaseAdapter {
         priorityView.setText(toDoItem.getPriority().toString());
         //change prioirity text color
 
-
-        String string = Chore.FORMAT.format(toDoItem.getDate());
         final TextView dateView = (TextView)itemLayout.findViewById(R.id.dateView);
-        dateView.setText(string);
+        dateView.setText(Chore.DISPLAY_FORMAT_DATE_TIME.format(toDoItem.getDate()));
 
         return itemLayout;
 
