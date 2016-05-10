@@ -231,7 +231,7 @@ public class AddNewChore extends AppCompatActivity {
 
 
 
-                if(person != null && !person.equals("")) {
+                if(person != null && !person.equals("name")) {
                     Log.i("person is ", person);
                     String titleString = getToDoTitle();
 
