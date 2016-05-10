@@ -37,6 +37,9 @@ public class Chore {
     public final static SimpleDateFormat DISPLAY_FORMAT_DATE_TIME = new SimpleDateFormat(
             "h:mm a    M/dd", Locale.US);
 
+    public final static SimpleDateFormat DISPLAY_FORMAT_DAY = new SimpleDateFormat(
+            "h:mm a    cccc", Locale.US);
+
 
     private String mTitle = new String();
     private String mPerson = new String();

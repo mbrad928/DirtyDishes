@@ -21,7 +21,10 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -63,14 +66,17 @@ public class MainActivity extends AppCompatActivity
 
     ListView listView;
 
+    ArrayList<Chore> chores;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        chores = new ArrayList<Chore>();
 
         setContentView(R.layout.activity_main);
 
-        mAdapter = new List_Adapter(getApplicationContext());
+        mAdapter = new List_Adapter(getApplicationContext(), chores);
 
         listView = (ListView) findViewById(R.id.listView);
         mDrawerList = (ListView) findViewById(R.id.nav_list);
@@ -83,6 +89,7 @@ public class MainActivity extends AppCompatActivity
         };
         drawerAdapter =
                 new ArrayAdapter<String>(this,R.layout.drawer_item,optionsArray);
+
         mDrawerList.setAdapter(drawerAdapter);
 
         LayoutInflater inflater = getLayoutInflater();
@@ -90,14 +97,14 @@ public class MainActivity extends AppCompatActivity
         final TextView name = (TextView) header_news.findViewById(R.id.username);
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("username",ParseUser.getCurrentUser().getUsername());
+        query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, com.parse.ParseException e) {
                 if (e == null) {
 
                     for (ParseUser user : objects) {
-                        if (user.get("nickname")==null) {
+                        if (user.get("nickname") == null) {
                             name.setText(ParseUser.getCurrentUser().getUsername());
                         }else{
                             name.setText((String)user.get("nickname"));
@@ -153,7 +160,16 @@ public class MainActivity extends AppCompatActivity
         //   });
 
 
+        mAdapter.sort(new Comparator<Chore>() {
+            @Override
+            public int compare(Chore one, Chore two) {
+
+                return one.getDate().compareTo(two.getDate());
+            }
+        });
         listView.setAdapter(mAdapter);
+
+
         //LayoutInflater inflater = getLayoutInflater();
         ViewGroup header = (ViewGroup)inflater.inflate(R.layout.task_header, mDrawerList, false);
         TextView title = (TextView) header.findViewById(R.id.title);
@@ -182,6 +198,15 @@ public class MainActivity extends AppCompatActivity
                 if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
                     mAdapter.add(item);
                 }
+                    Collections.sort(chores, new Comparator<Chore>() {
+                        @Override
+                        public int compare(Chore one, Chore two) {
+
+                            return one.getDate().compareTo(two.getDate());
+                        }
+                    });
+                    mAdapter.notifyDataSetChanged();
+                //}
 
 
             } else if (requestCode == SIGN_IN_REQUEST_CODE) {
@@ -227,14 +252,14 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void setSignedIn(boolean b){
+    public void setSignedIn(boolean b) {
         this.userSignedIn = b;
     }
 
     public boolean itemSelected(int position) {
         if(position == 1){//View Your Chores
             Log.d(TAG, "'View Your Chores' selected");
-            Intent i = new Intent(MainActivity.this,MainActivity.class);
+            Intent i = new Intent(MainActivity.this, MainActivity.class);
             mAdapter.clear();
             startActivity(i);
 
@@ -284,7 +309,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             if (mAdapter.getCount() == 0) {
-                Log.d(TAG,"load");
+                Log.d(TAG, "load");
                 loadItems();
             }
 
@@ -348,8 +373,15 @@ public class MainActivity extends AppCompatActivity
                         for (ChoreItem chore : objects){
                             Chore newC = new Chore(chore);
 
-                            mAdapter.add(newC);
+                            chores.add(newC);
+                            Collections.sort(chores, new Comparator<Chore>() {
+                                @Override
+                                public int compare(Chore one, Chore two) {
 
+                                    return one.getDate().compareTo(two.getDate());
+                                }
+                            });
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
                 }
@@ -364,7 +396,16 @@ public class MainActivity extends AppCompatActivity
                         for (ChoreItem chore : objects){
                             if(chore.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
                                 Chore newC = new Chore(chore);
-                                mAdapter.add(newC);
+
+                                chores.add(newC);
+                                Collections.sort(chores, new Comparator<Chore>() {
+                                    @Override
+                                    public int compare(Chore one, Chore two) {
+
+                                        return one.getDate().compareTo(two.getDate());
+                                    }
+                                });
+                                mAdapter.notifyDataSetChanged();
                             }
                         }
                     }
