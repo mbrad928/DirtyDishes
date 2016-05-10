@@ -20,12 +20,9 @@ import com.parse.FindCallback;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -196,7 +193,9 @@ public class MainActivity extends AppCompatActivity
             if (requestCode == ADD_TODO_ITEM_REQUEST) {
                 Chore item = new Chore(data);
                 if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
-                    mAdapter.add(item);
+                    chores.add(item);
+                }else{
+                    loadItems();
                 }
                     Collections.sort(chores, new Comparator<Chore>() {
                         @Override

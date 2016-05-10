@@ -89,11 +89,13 @@ public class AddApartment extends AppCompatActivity {
                 if (e == null) {
 
                     for (ParseUser user : objects) {
-                        if (user.get("apartment").equals(apartment_code)) {
-                            if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-                                mAdapter.add(user.getUsername() + " (self)");
-                            } else {
-                                mAdapter.add(user.getUsername());
+                        if (user.get("apartment") != null) {
+                            if (user.get("apartment").equals(apartment_code)) {
+                                if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+                                    mAdapter.add(user.getUsername() + " (self)");
+                                } else {
+                                    mAdapter.add(user.getUsername());
+                                }
                             }
                         }
 
