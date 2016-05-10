@@ -126,11 +126,6 @@ public class List_Adapter extends BaseAdapter {
         //statusView.setChecked(toDoItem.getStatus().equals(Chore.Status.DONE));
         TextView overdue = (TextView) itemLayout.findViewById(R.id.overdue);
 
-        Calendar calendar = Calendar.getInstance();
-        int thisMonth = calendar.get(Calendar.MONTH) + 1; //starts at 0
-        int thisDay = calendar.get(Calendar.DAY_OF_MONTH);
-        SimpleDateFormat simpleDate =  new SimpleDateFormat("MM-dd");
-
         if(Calendar.getInstance().getTime().before(toDoItem.getDate())) {
             overdue.setVisibility(View.INVISIBLE);
         }
