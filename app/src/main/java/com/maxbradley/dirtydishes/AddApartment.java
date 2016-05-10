@@ -111,22 +111,46 @@ public class AddApartment extends AppCompatActivity {
                 EditText name = (EditText) findViewById(R.id.name);
                 EditText phone = (EditText) findViewById(R.id.phone);
 
-                // Requesting permission to send SMS
-                int permission = ActivityCompat.checkSelfPermission(AddApartment.this,
-                        "android.permission.SEND_SMS");
+                String phoneText = phone.getText().toString();
 
-                if (permission == PackageManager.PERMISSION_DENIED) {
-                    ActivityCompat.requestPermissions(AddApartment.this,
-                            new String[]{"android.permission.SEND_SMS"},
-                            1);
+                if (phoneText.length() != 10){
+                    Toast t = Toast.makeText(getApplicationContext(),
+                            "You must enter a valid phone number",
+                            Toast.LENGTH_LONG);
+                    t.show();
+
+
+                }else if (name.getText().toString().split(" ").length > 2){
+                    Toast t = Toast.makeText(getApplicationContext(),
+                            "No more than first and last name should be entered",
+                            Toast.LENGTH_LONG);
+                    t.show();
+
+                }else {
+
+                    // Requesting permission to send SMS
+                    int permission = ActivityCompat.checkSelfPermission(AddApartment.this,
+                            "android.permission.SEND_SMS");
+
+                    if (permission == PackageManager.PERMISSION_DENIED) {
+                        ActivityCompat.requestPermissions(AddApartment.this,
+                                new String[]{"android.permission.SEND_SMS"},
+                                1);
+                    }
+
+                    // Have permission, can now send SMS
+                    String message = "Hi " + name.getText().toString() + "!" +
+                            " You've been added to an apartment on RoomMe!" +
+                            " Download the app, then create a free account and" +
+                            " use this code to join: " +
+                            apartment_code;
+
+                    sendSMS(phone.getText().toString(), message); //send code here
+                    Log.d("SendSMS", "Sent SMS");
+                    mAdapter.add(name.getText().toString());
+                    name.setText("");
+                    phone.setText("");
                 }
-
-                // Have permission, can now send SMS
-                sendSMS(phone.getText().toString(), apartment_code); //send code here
-                Log.d("SendSMS","Sent SMS");
-                mAdapter.add(name.getText().toString());
-                name.setText("");
-                phone.setText("");
             }
         });
 

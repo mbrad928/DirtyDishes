@@ -44,7 +44,6 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import org.w3c.dom.Text;
 //import course.labs.todomanager.ToDoItem.Priority;
@@ -232,38 +231,28 @@ public class AddNewChore extends AppCompatActivity {
 
 
 
-                if(person != null && !person.equals("Name")) {
+                if(person != null && !person.equals("name")) {
                     Log.i("person is ", person);
                     String titleString = getToDoTitle();
 
-                    final String newTitle = titleString;
-                    final Chore.Priority newPriority = priority;
-                    final Chore.Status newStatus = status;
-                    final String newPerson = person;
 
-                    final String newFullDate = Chore.FORMAT.format(mCalendar.getTime());
-
+                    String fullDate = Chore.FORMAT.format(mCalendar.getTime());
                     ChoreItem newChore = new ChoreItem();
                     newChore.setUser(ParseUser.getCurrentUser());
                     newChore.setApartment(ParseUser.getCurrentUser().getString("apartment"));
                     newChore.setTitle(titleString);
                     newChore.setPriority(priority.ordinal());
                     newChore.setStatus(status.ordinal());
-                    newChore.setDate(newFullDate);
+                    newChore.setDate(fullDate);
                     newChore.setPerson(person);
-                    newChore.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            Intent data = new Intent();
-                            Chore.packageIntent(data, newTitle, newPriority, newStatus,
-                                    newFullDate, newPerson);
+                    newChore.saveInBackground();
 
-                            setResult(RESULT_OK, data);
-                            finish();
-                        }
-                    });
+                    Intent data = new Intent();
+                    Chore.packageIntent(data, titleString, priority, status,
+                            fullDate, person);
 
-
+                    setResult(RESULT_OK, data);
+                    finish();
 
                 }else{
                     Log.d(TAG,"no person");
