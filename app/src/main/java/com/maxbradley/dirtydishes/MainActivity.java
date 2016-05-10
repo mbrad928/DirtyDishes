@@ -179,9 +179,9 @@ public class MainActivity extends AppCompatActivity
 
             if (requestCode == ADD_TODO_ITEM_REQUEST) {
                 Chore item = new Chore(data);
-                //if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
+                if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
                     mAdapter.add(item);
-                //}
+                }
 
 
             } else if (requestCode == SIGN_IN_REQUEST_CODE) {
