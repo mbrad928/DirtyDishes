@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <receiver android:name=".Notifications"/>
+
     <application
         android:name=".RoomMe"
         android:allowBackup="true"
@@ -70,6 +72,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".Notifications"/>
+
     </application>
 
 </manifest>

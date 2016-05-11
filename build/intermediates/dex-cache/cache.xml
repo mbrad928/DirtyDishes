@@ -1,3 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        jar="/Users/Max/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.4.0/d85884acf6810a3bbbecb587f239005cbc846dc4/bolts-tasks-1.4.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/pre-dexed/debug/bolts-tasks-1.4.0_30edf81232942d60d45d38316dd5075038bab01f.jar" />
+    </item>
+    <item
+        jar="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.1.1_02d43bb0f03840bcf649b665f4bc322cdf06ca2e.jar" />
+    </item>
+    <item
+        jar="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-23.1.1_2c6b688aa6a048b231e72454e6a8d24ffb89d54e.jar" />
+    </item>
+    <item
+        jar="/Users/Max/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-applinks/1.4.0/8ad21bf21784dacce5f2043afb97218cc377e835/bolts-applinks-1.4.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="8ad21bf21784dacce5f2043afb97218cc377e835">
+        <dex dex="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/pre-dexed/debug/bolts-applinks-1.4.0_c36c36cd66870ee12f0221bf3ef9ddfe8753347c.jar" />
+    </item>
+    <item
+        jar="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
+        <dex dex="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.1.1_fad923f1f8bbd1c12b15bcc48f8bf6a6ff6a5716.jar" />
+    </item>
+    <item
+        jar="/Users/Max/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.1/support-annotations-23.1.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
+        <dex dex="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/pre-dexed/debug/support-annotations-23.1.1_809af7ee391ee246c01e104c76ebcbdb52aa0e90.jar" />
+    </item>
+    <item
+        jar="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="379471b2bd17d9737c050345c08e8c7d16589784">
+        <dex dex="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/pre-dexed/debug/com.android.support-design-23.1.1_24e31e3cba9ae6ae273bb642953b4f8e60037a79.jar" />
+    </item>
+    <item
+        jar="/Users/Max/.gradle/caches/modules-2/files-2.1/com.parse/parse-android/1.13.0/58a7d54b6a4f28be11f0cecec93097eddf473e6f/parse-android-1.13.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="58a7d54b6a4f28be11f0cecec93097eddf473e6f">
+        <dex dex="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/pre-dexed/debug/parse-android-1.13.0_a1839ad014529350db72d145d293811af5a3d311.jar" />
+    </item>
+    <item
+        jar="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/exploded-aar/com.mikepenz/fontawesome-typeface/4.6.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="ac8ac3b58944cfb7f0f3da5852d1730320a165e1">
+        <dex dex="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/pre-dexed/debug/com.mikepenz-fontawesome-typeface-4.6.0.1_833ad34f70d935dd0f5e5ee1e54fd52be45b7179.jar" />
+    </item>
+    <item
+        jar="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/libs/internal_impl-23.1.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
+        <dex dex="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/pre-dexed/debug/internal_impl-23.1.1_027ce6618bbc7ea7c5a7853c251802ed316cffee.jar" />
+    </item>
+    <item
+        jar="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/exploded-aar/com.mikepenz/iconics-core/2.5.11/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="98a135c7935e62ac041acc1fcb148973bde828d5">
+        <dex dex="/Users/Max/Dropbox/School/CMSC436/DirtyDishes/app/build/intermediates/pre-dexed/debug/com.mikepenz-iconics-core-2.5.11_ae22b4a7e974303342936a85cfa4e9b345aba646.jar" />
+    </item>
+
+</items>

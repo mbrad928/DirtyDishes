@@ -91,8 +91,8 @@ public class AddNewChore extends AppCompatActivity {
  //   RadioGroup roomates_radio;
 
     // IDs for menu items
-    private static final int MENU_DELETE = Menu.FIRST;
-    private static final int MENU_LOGOUT = Menu.FIRST + 1;
+    private static final int MENU_LOGOUT = Menu.FIRST;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -260,9 +260,8 @@ public class AddNewChore extends AppCompatActivity {
                 if(person != null && !person.equals("name")) {
 
                     Log.i("person is ", person);
-
-                    //String titleString = getToDoTitle();
                     String titleString = mTitleText.getText().toString();
+
 
                     if (titleString.equals("")){
                         Toast t = Toast.makeText(getApplicationContext(),
@@ -291,8 +290,6 @@ public class AddNewChore extends AppCompatActivity {
                         finish();
                     }
                     
-
-                   
 
                 }else{
                     Log.d(TAG,"no person");
@@ -494,7 +491,6 @@ public class AddNewChore extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete all");
         menu.add(Menu.NONE, MENU_LOGOUT, Menu.NONE, "Logout");
         return true;
     }
@@ -502,9 +498,6 @@ public class AddNewChore extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_DELETE:
-                //mAdapter.clear();
-                return true;
             case MENU_LOGOUT:
                 ParseUser.logOut();
                 Intent intent = new Intent(AddNewChore.this,SignIn.class);
