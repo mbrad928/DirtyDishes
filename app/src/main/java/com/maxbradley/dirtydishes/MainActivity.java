@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity
                 }else{
                 if(item.getPerson().equals(ParseUser.getCurrentUser().getUsername())) {
                     chores.add(item);
+                    setNotification(item);
                 }
                 }//else{
                   //  mAdapter.clear();
@@ -388,7 +389,7 @@ public class MainActivity extends AppCompatActivity
                             Chore newC = new Chore(chore);
 
                             chores.add(newC);
-                            setNotification(newC);
+                           // setNotification(newC);
                             Collections.sort(chores, new Comparator<Chore>() {
                                 @Override
                                 public int compare(Chore one, Chore two) {
@@ -413,7 +414,7 @@ public class MainActivity extends AppCompatActivity
                                 Chore newC = new Chore(chore);
 
                                 chores.add(newC);
-                                setNotification(newC);
+                             //   setNotification(newC);
                                 Collections.sort(chores, new Comparator<Chore>() {
                                     @Override
                                     public int compare(Chore one, Chore two) {
