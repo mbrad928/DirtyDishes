@@ -237,7 +237,8 @@ public class AddNewChore extends AppCompatActivity {
 
                 if(person != null && !person.equals("name")) {
                     Log.i("person is ", person);
-                    String titleString = getToDoTitle();
+                    String titleString = mTitleText.getText().toString();
+
 
 
                     String fullDate = Chore.FORMAT.format(mCalendar.getTime());
@@ -456,7 +457,6 @@ public class AddNewChore extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete all");
         menu.add(Menu.NONE, MENU_LOGOUT, Menu.NONE, "Logout");
         return true;
     }
@@ -464,9 +464,6 @@ public class AddNewChore extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_DELETE:
-                //mAdapter.clear();
-                return true;
             case MENU_LOGOUT:
                 ParseUser.logOut();
                 Intent intent = new Intent(AddNewChore.this,SignIn.class);
