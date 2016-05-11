@@ -389,7 +389,7 @@ public class MainActivity extends AppCompatActivity
                             Chore newC = new Chore(chore);
 
                             chores.add(newC);
-                           // setNotification(newC);
+                            setNotification(newC);
                             Collections.sort(chores, new Comparator<Chore>() {
                                 @Override
                                 public int compare(Chore one, Chore two) {
@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity
                                 Chore newC = new Chore(chore);
 
                                 chores.add(newC);
-                             //   setNotification(newC);
+                                setNotification(newC);
                                 Collections.sort(chores, new Comparator<Chore>() {
                                     @Override
                                     public int compare(Chore one, Chore two) {
